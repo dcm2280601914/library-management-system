@@ -1,6 +1,6 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.entity.Employee;
+import com.example.librarymanagementsystem.entity.Employee;
 
 import java.util.List;
 import java.util.Optional;

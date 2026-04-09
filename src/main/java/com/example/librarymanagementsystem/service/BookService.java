@@ -1,6 +1,6 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.entity.Book;
+import com.example.librarymanagementsystem.entity.Book;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

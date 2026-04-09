@@ -1,7 +1,7 @@
-package com.example.libmanagement.security;
+package com.example.librarymanagementsystem.security;
 
-import com.example.libmanagement.entity.Employee;
-import com.example.libmanagement.repository.EmployeeRepository;
+import com.example.librarymanagementsystem.entity.Employee;
+import com.example.librarymanagementsystem.repository.EmployeeRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;

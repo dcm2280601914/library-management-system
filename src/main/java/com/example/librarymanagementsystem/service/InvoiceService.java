@@ -1,8 +1,8 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.entity.Invoice;
-import com.example.libmanagement.entity.ReturnRecord;
-import com.example.libmanagement.enums.PaymentMethod;
+import com.example.librarymanagementsystem.entity.Invoice;
+import com.example.librarymanagementsystem.entity.ReturnRecord;
+import com.example.librarymanagementsystem.enums.PaymentMethod;
 
 import java.util.List;
 

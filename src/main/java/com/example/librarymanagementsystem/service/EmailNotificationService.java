@@ -1,4 +1,4 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
 
 public interface EmailNotificationService {

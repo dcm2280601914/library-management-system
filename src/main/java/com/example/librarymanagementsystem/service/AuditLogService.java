@@ -1,6 +1,6 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.entity.AuditLog;
+import com.example.librarymanagementsystem.entity.AuditLog;
 
 import java.util.List;
 

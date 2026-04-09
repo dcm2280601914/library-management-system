@@ -1,9 +1,9 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.dto.BorrowHistoryDto;
-import com.example.libmanagement.entity.Borrower;
-import com.example.libmanagement.enums.BorrowerStatus;
-import com.example.libmanagement.enums.MembershipLevel;
+import com.example.librarymanagementsystem.dto.BorrowHistoryDto;
+import com.example.librarymanagementsystem.entity.Borrower;
+import com.example.librarymanagementsystem.enums.BorrowerStatus;
+import com.example.librarymanagementsystem.enums.MembershipLevel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.example.libmanagement.service;
+package com.example.librarymanagementsystem.service;
 
-import com.example.libmanagement.entity.BorrowRecord;
+import com.example.librarymanagementsystem.entity.BorrowRecord;
 
 import java.util.List;
 import java.util.Optional;
