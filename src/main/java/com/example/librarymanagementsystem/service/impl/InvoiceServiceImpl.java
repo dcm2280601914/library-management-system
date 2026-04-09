@@ -1,14 +1,14 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.Invoice;
-import com.example.libmanagement.entity.ReturnRecord;
-import com.example.libmanagement.enums.InvoiceStatus;
-import com.example.libmanagement.enums.PaymentMethod;
-import com.example.libmanagement.enums.PaymentStatus;
-import com.example.libmanagement.repository.InvoiceRepository;
-import com.example.libmanagement.repository.ReturnRecordRepository;
-import com.example.libmanagement.service.AuditLogService;
-import com.example.libmanagement.service.InvoiceService;
+import com.example.librarymanagementsystem.entity.Invoice;
+import com.example.librarymanagementsystem.entity.ReturnRecord;
+import com.example.librarymanagementsystem.enums.InvoiceStatus;
+import com.example.librarymanagementsystem.enums.PaymentMethod;
+import com.example.librarymanagementsystem.enums.PaymentStatus;
+import com.example.librarymanagementsystem.repository.InvoiceRepository;
+import com.example.librarymanagementsystem.repository.ReturnRecordRepository;
+import com.example.librarymanagementsystem.service.AuditLogService;
+import com.example.librarymanagementsystem.service.InvoiceService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

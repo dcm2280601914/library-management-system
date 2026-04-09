@@ -1,12 +1,12 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.Book;
-import com.example.libmanagement.entity.Category;
-import com.example.libmanagement.repository.BookRepository;
-import com.example.libmanagement.repository.CategoryRepository;
-import com.example.libmanagement.service.AuditLogService;
-import com.example.libmanagement.service.BookService;
-import com.example.libmanagement.specification.BookSpecification;
+import com.example.librarymanagementsystem.entity.Book;
+import com.example.librarymanagementsystem.entity.Category;
+import com.example.librarymanagementsystem.repository.BookRepository;
+import com.example.librarymanagementsystem.repository.CategoryRepository;
+import com.example.librarymanagementsystem.service.AuditLogService;
+import com.example.librarymanagementsystem.service.BookService;
+import com.example.librarymanagementsystem.specification.BookSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
