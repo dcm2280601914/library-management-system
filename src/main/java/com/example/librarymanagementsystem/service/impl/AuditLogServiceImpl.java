@@ -1,10 +1,10 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.AuditLog;
-import com.example.libmanagement.entity.Employee;
-import com.example.libmanagement.repository.AuditLogRepository;
-import com.example.libmanagement.repository.EmployeeRepository;
-import com.example.libmanagement.service.AuditLogService;
+import com.example.librarymanagementsystem.entity.AuditLog;
+import com.example.librarymanagementsystem.entity.Employee;
+import com.example.librarymanagementsystem.repository.AuditLogRepository;
+import com.example.librarymanagementsystem.repository.EmployeeRepository;
+import com.example.librarymanagementsystem.service.AuditLogService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

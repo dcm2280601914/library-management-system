@@ -1,15 +1,15 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.dto.BorrowHistoryDto;
-import com.example.libmanagement.entity.BorrowRecord;
-import com.example.libmanagement.entity.Borrower;
-import com.example.libmanagement.entity.ReturnRecord;
-import com.example.libmanagement.enums.BorrowerStatus;
-import com.example.libmanagement.enums.MembershipLevel;
-import com.example.libmanagement.repository.BorrowRecordRepository;
-import com.example.libmanagement.repository.BorrowerRepository;
-import com.example.libmanagement.repository.ReturnRecordRepository;
-import com.example.libmanagement.service.BorrowerService;
+import com.example.librarymanagementsystem.dto.BorrowHistoryDto;
+import com.example.librarymanagementsystem.entity.BorrowRecord;
+import com.example.librarymanagementsystem.entity.Borrower;
+import com.example.librarymanagementsystem.entity.ReturnRecord;
+import com.example.librarymanagementsystem.enums.BorrowerStatus;
+import com.example.librarymanagementsystem.enums.MembershipLevel;
+import com.example.librarymanagementsystem.repository.BorrowRecordRepository;
+import com.example.librarymanagementsystem.repository.BorrowerRepository;
+import com.example.librarymanagementsystem.repository.ReturnRecordRepository;
+import com.example.librarymanagementsystem.service.BorrowerService;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,7 +1,7 @@
-package com.example.libmanagement.specification;
+package com.example.librarymanagementsystem.specification;
 
-import com.example.libmanagement.entity.Book;
-import com.example.libmanagement.entity.Category;
+import com.example.librarymanagementsystem.entity.Book;
+import com.example.librarymanagementsystem.entity.Category;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 

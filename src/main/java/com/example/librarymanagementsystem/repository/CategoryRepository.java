@@ -22,7 +22,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query(
             value = """
-        select new com.example.libmanagement.dto.CategoryStatisticsDto(
+        select new com.example.librarymanagementsystem.dto.CategoryStatisticsDto(
             c.id,
             c.name,
             c.description,
@@ -49,7 +49,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
                                                        Pageable pageable);
 
     @Query("""
-        select new com.example.libmanagement.dto.CategoryStatisticsDto(
+        select new com.example.librarymanagementsystem.dto.CategoryStatisticsDto(
             c.id,
             c.name,
             c.description,
