@@ -1,4 +1,4 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -55,9 +55,9 @@ public class Book {
     }
 
     public Book(String title, Category category, String author, String publisher,
-                Integer publicationYear, String isbn, String barcode, String location,
-                String coverImage, LocalDate importDate, Integer totalQuantity,
-                Integer availableQuantity, String description) {
+            Integer publicationYear, String isbn, String barcode, String location,
+            String coverImage, LocalDate importDate, Integer totalQuantity,
+            Integer availableQuantity, String description) {
         this.title = title;
         this.category = category;
         this.author = author;

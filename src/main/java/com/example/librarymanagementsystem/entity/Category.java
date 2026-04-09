@@ -1,6 +1,6 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.CategoryStatus;
+import com.example.librarymanagementsystem.enums.CategoryStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

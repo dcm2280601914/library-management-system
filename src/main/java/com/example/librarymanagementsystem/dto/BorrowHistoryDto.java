@@ -1,7 +1,7 @@
-package com.example.libmanagement.dto;
+package com.example.librarymanagementsystem.dto;
 
-import com.example.libmanagement.enums.BorrowStatus;
-import com.example.libmanagement.enums.ReturnStatus;
+import com.example.librarymanagementsystem.enums.BorrowStatus;
+import com.example.librarymanagementsystem.enums.ReturnStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
