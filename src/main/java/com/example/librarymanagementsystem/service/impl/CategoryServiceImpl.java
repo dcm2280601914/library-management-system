@@ -1,10 +1,10 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.dto.CategoryStatisticsDto;
-import com.example.libmanagement.entity.Category;
-import com.example.libmanagement.enums.CategoryStatus;
-import com.example.libmanagement.repository.CategoryRepository;
-import com.example.libmanagement.service.CategoryService;
+import com.example.librarymanagementsystem.dto.CategoryStatisticsDto;
+import com.example.librarymanagementsystem.entity.Category;
+import com.example.librarymanagementsystem.enums.CategoryStatus;
+import com.example.librarymanagementsystem.repository.CategoryRepository;
+import com.example.librarymanagementsystem.service.CategoryService;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

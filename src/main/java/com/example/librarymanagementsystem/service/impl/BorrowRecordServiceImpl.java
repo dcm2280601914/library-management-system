@@ -1,15 +1,15 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.Book;
-import com.example.libmanagement.entity.BorrowRecord;
-import com.example.libmanagement.entity.Borrower;
-import com.example.libmanagement.entity.Employee;
-import com.example.libmanagement.enums.BorrowStatus;
-import com.example.libmanagement.repository.BookRepository;
-import com.example.libmanagement.repository.BorrowRecordRepository;
-import com.example.libmanagement.repository.BorrowerRepository;
-import com.example.libmanagement.repository.EmployeeRepository;
-import com.example.libmanagement.service.BorrowRecordService;
+import com.example.librarymanagementsystem.entity.Book;
+import com.example.librarymanagementsystem.entity.BorrowRecord;
+import com.example.librarymanagementsystem.entity.Borrower;
+import com.example.librarymanagementsystem.entity.Employee;
+import com.example.librarymanagementsystem.enums.BorrowStatus;
+import com.example.librarymanagementsystem.repository.BookRepository;
+import com.example.librarymanagementsystem.repository.BorrowRecordRepository;
+import com.example.librarymanagementsystem.repository.BorrowerRepository;
+import com.example.librarymanagementsystem.repository.EmployeeRepository;
+import com.example.librarymanagementsystem.service.BorrowRecordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;

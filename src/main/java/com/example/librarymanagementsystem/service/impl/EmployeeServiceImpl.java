@@ -1,8 +1,8 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.Employee;
-import com.example.libmanagement.repository.EmployeeRepository;
-import com.example.libmanagement.service.EmployeeService;
+import com.example.librarymanagementsystem.entity.Employee;
+import com.example.librarymanagementsystem.repository.EmployeeRepository;
+import com.example.librarymanagementsystem.service.EmployeeService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

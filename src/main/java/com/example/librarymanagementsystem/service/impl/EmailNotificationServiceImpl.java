@@ -1,11 +1,11 @@
-package com.example.libmanagement.service.impl;
+package com.example.librarymanagementsystem.service.impl;
 
-import com.example.libmanagement.entity.BorrowRecord;
-import com.example.libmanagement.entity.Borrower;
-import com.example.libmanagement.repository.BorrowRecordRepository;
-import com.example.libmanagement.repository.BorrowerRepository;
-import com.example.libmanagement.repository.ReturnRecordRepository;
-import com.example.libmanagement.service.EmailNotificationService;
+import com.example.librarymanagementsystem.entity.BorrowRecord;
+import com.example.librarymanagementsystem.entity.Borrower;
+import com.example.librarymanagementsystem.repository.BorrowRecordRepository;
+import com.example.librarymanagementsystem.repository.BorrowerRepository;
+import com.example.librarymanagementsystem.repository.ReturnRecordRepository;
+import com.example.librarymanagementsystem.service.EmailNotificationService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
