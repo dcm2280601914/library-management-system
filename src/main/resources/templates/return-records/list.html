@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý trả sách</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf3;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --dark-soft: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            color: var(--text-main);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 760px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .soft-card,
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .stat-card {
+            padding: 18px;
+            height: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.primary { background: var(--primary-soft); color: var(--primary-color); }
+        .stat-icon.success { background: var(--success-soft); color: #15803d; }
+        .stat-icon.warning { background: var(--warning-soft); color: #d97706; }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 48px;
+            border-radius: 14px;
+            border-color: #dbe2ea;
+            box-shadow: none !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .search-input-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid #dbe2ea;
+            border-radius: 14px;
+            background: #fff;
+            min-height: 48px;
+            padding: 0 12px;
+        }
+
+        .search-input-group:focus-within {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+        }
+
+        .search-input-group i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .search-input-group input {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            min-height: 44px;
+            padding-left: 0;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 0.95rem 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #eef2f7;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .record-code {
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        .record-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .record-sub {
+            color: var(--text-muted);
+            font-size: 0.86rem;
+        }
+
+        .badge-pill {
+            border-radius: 999px;
+            padding: 0.52rem 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-returned { background: #dcfce7; color: #166534; }
+        .badge-late { background: #fee2e2; color: #991b1b; }
+        .badge-damaged { background: #fef3c7; color: #92400e; }
+        .badge-lost { background: #e2e8f0; color: #0f172a; }
+
+        .badge-intact { background: #dcfce7; color: #166534; }
+        .badge-minor { background: #fef3c7; color: #92400e; }
+        .badge-severe { background: #fee2e2; color: #991b1b; }
+
+        .badge-paid { background: #dcfce7; color: #166534; }
+        .badge-unpaid { background: #e2e8f0; color: #475569; }
+
+        .fine-text {
+            font-weight: 700;
+            color: #b91c1c;
+        }
+
+        .action-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .action-group .btn {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.88rem;
+            border-radius: 12px;
+        }
+
+        .empty-state {
+            padding: 3.5rem 1rem;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 82px;
+            height: 82px;
+            border-radius: 24px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border: none;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-arrow-return-left"></i>
+                            Quản lý giao dịch trả sách
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Quản lý trả sách</h1>
+                        <p class="hero-subtitle mb-0">
+                            Theo dõi lịch sử trả sách, tình trạng sách khi trả, tiền phạt,
+                            lý do phạt và trạng thái thanh toán trên cùng một màn hình.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/}" class="btn btn-light-soft">
+                            <i class="bi bi-house-door me-1"></i> Trang chủ
+                        </a>
+                        <a th:href="@{/return-records/add}" class="btn btn-light-soft">
+                            <i class="bi bi-plus-circle me-1"></i> Thêm phiếu trả
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger shadow-sm mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Tổng phiếu trả</div>
+                            <div class="fs-3 fw-bold mt-1"
+                                 th:text="${returnRecords != null ? #lists.size(returnRecords) : 0}">0</div>
+                            <div class="section-subtitle mt-1">Số bản ghi đang hiển thị</div>
+                        </div>
+                        <div class="stat-icon primary">
+                            <i class="bi bi-collection"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Đúng hạn</div>
+                            <div class="fs-3 fw-bold mt-1 text-success"
+                                 th:text="${returnRecords != null ? #lists.size(returnRecords.?[
+                                    status != null and status.name() == 'RETURNED'
+                                    and (bookCondition == null or bookCondition.name() == 'INTACT')
+                                    and (fineReason == null or fineReason.name() == 'NONE')
+                                 ]) : 0}">
+                                0
+                            </div>
+                            <div class="section-subtitle mt-1">Đã trả sách bình thường</div>
+                        </div>
+                        <div class="stat-icon success">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Có vấn đề</div>
+                            <div class="fs-3 fw-bold mt-1 text-warning"
+                                 th:text="${returnRecords != null ? #lists.size(returnRecords.?[
+                                    (status != null and status.name() != 'RETURNED')
+                                    or (bookCondition != null and bookCondition.name() != 'INTACT')
+                                    or (fineReason != null and fineReason.name() != 'NONE')
+                                 ]) : 0}">
+                                0
+                            </div>
+                            <div class="section-subtitle mt-1">Quá hạn, hư hỏng hoặc mất</div>
+                        </div>
+                        <div class="stat-icon warning">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card soft-card mb-4">
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <h2 class="section-title mb-1">Xác nhận trả nhanh</h2>
+                    <div class="section-subtitle">Quét hoặc nhập mã phiếu mượn để tạo phiếu trả nhanh</div>
+                </div>
+
+                <form th:action="@{/return-records/quick-confirm}" method="post" class="row g-3 align-items-end">
+                    <div class="col-lg-7">
+                        <label class="form-label">Mã phiếu mượn</label>
+                        <div class="search-input-group">
+                            <i class="bi bi-upc-scan"></i>
+                            <input type="text"
+                                   name="borrowCode"
+                                   class="form-control"
+                                   placeholder="Quét hoặc nhập mã phiếu mượn, ví dụ: BR-123456"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="form-label">Tình trạng sách</label>
+                        <select name="bookCondition" class="form-select">
+                            <option value="INTACT">Nguyên vẹn</option>
+                            <option value="MINOR_DAMAGE">Hư hỏng nhẹ</option>
+                            <option value="SEVERE_DAMAGE">Hư hỏng nặng</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-1"></i> Xác nhận trả
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card soft-card mb-4">
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <h2 class="section-title mb-1">Tìm kiếm phiếu trả</h2>
+                    <div class="section-subtitle">Tra cứu nhanh theo tên người mượn</div>
+                </div>
+
+                <form th:action="@{/return-records}" method="get" class="row g-3">
+                    <div class="col-md-10">
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text"
+                                   name="keyword"
+                                   class="form-control"
+                                   placeholder="Tìm theo tên người mượn..."
+                                   th:value="${keyword}">
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-outline-primary">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card soft-card">
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <h2 class="section-title mb-1">Danh sách phiếu trả</h2>
+                    <div class="section-subtitle">Theo dõi tình trạng trả, phạt và thanh toán</div>
+                </div>
+
+                <div class="table-wrap">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th>Mã trả</th>
+                                <th>Người mượn</th>
+                                <th>Sách</th>
+                                <th>Ngày trả</th>
+                                <th>Trạng thái</th>
+                                <th>Tình trạng sách</th>
+                                <th>Quá hạn</th>
+                                <th>Tiền phạt</th>
+                                <th>Lý do phạt</th>
+                                <th>Thanh toán</th>
+                                <th>Chức năng</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${#lists.isEmpty(returnRecords)}">
+                                <td colspan="11">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="bi bi-inbox"></i>
+                                        </div>
+                                        <h5 class="fw-bold mb-2">Chưa có phiếu trả nào</h5>
+                                        <p class="text-muted mb-3">Dữ liệu trả sách sẽ hiển thị tại đây khi có giao dịch hoàn trả.</p>
+                                        <a th:href="@{/return-records/add}" class="btn btn-outline-primary">
+                                            <i class="bi bi-plus-circle me-1"></i> Thêm phiếu trả
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr th:each="item : ${returnRecords}">
+                                <td>
+                                    <div class="record-code" th:text="${item.returnCode}">TRA-001</div>
+                                </td>
+
+                                <td>
+                                    <div class="record-name"
+                                         th:text="${item.borrowRecord != null and item.borrowRecord.borrower != null ? item.borrowRecord.borrower.fullName : '---'}">
+                                        Người mượn
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="record-name"
+                                         th:text="${item.borrowRecord != null and item.borrowRecord.book != null ? item.borrowRecord.book.title : '---'}">
+                                        Tên sách
+                                    </div>
+                                </td>
+
+                                <td th:text="${item.returnDate}">2026-04-05</td>
+
+                                <td>
+                                    <span th:if="${item.status != null and item.status.name() == 'RETURNED'}" class="badge-pill badge-returned">
+                                        <i class="bi bi-check-circle-fill"></i> Đúng hạn
+                                    </span>
+                                    <span th:if="${item.status != null and item.status.name() == 'LATE'}" class="badge-pill badge-late">
+                                        <i class="bi bi-clock-history"></i> Quá hạn
+                                    </span>
+                                    <span th:if="${item.status != null and item.status.name() == 'DAMAGED'}" class="badge-pill badge-damaged">
+                                        <i class="bi bi-exclamation-triangle-fill"></i> Hư hỏng
+                                    </span>
+                                    <span th:if="${item.status != null and item.status.name() == 'LOST'}" class="badge-pill badge-lost">
+                                        <i class="bi bi-x-circle-fill"></i> Mất sách
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${item.bookCondition != null and item.bookCondition.name() == 'INTACT'}" class="badge-pill badge-intact">
+                                        <i class="bi bi-book"></i> Nguyên vẹn
+                                    </span>
+                                    <span th:if="${item.bookCondition != null and item.bookCondition.name() == 'MINOR_DAMAGE'}" class="badge-pill badge-minor">
+                                        <i class="bi bi-tools"></i> Hư nhẹ
+                                    </span>
+                                    <span th:if="${item.bookCondition != null and item.bookCondition.name() == 'SEVERE_DAMAGE'}" class="badge-pill badge-severe">
+                                        <i class="bi bi-slash-circle"></i> Hư nặng
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${item.overdueDays != null and item.overdueDays > 0}" class="fw-bold text-danger"
+                                          th:text="${item.overdueDays + ' ngày'}">2 ngày</span>
+                                    <span th:if="${item.overdueDays == null or item.overdueDays <= 0}" class="fw-semibold text-success">0 ngày</span>
+                                </td>
+
+                                <td class="fine-text"
+                                    th:text="${#numbers.formatDecimal(item.fineAmount != null ? item.fineAmount : 0, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">
+                                    0 VNĐ
+                                </td>
+
+                                <td>
+                                    <span th:if="${item.fineReason != null and item.fineReason.name() == 'NONE'}">Không có</span>
+                                    <span th:if="${item.fineReason != null and item.fineReason.name() == 'LATE_RETURN'}" class="text-danger fw-semibold">Trả muộn</span>
+                                    <span th:if="${item.fineReason != null and item.fineReason.name() == 'DAMAGED'}">Hư hỏng</span>
+                                    <span th:if="${item.fineReason != null and item.fineReason.name() == 'LOST'}">Mất sách</span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${item.paymentStatus != null and item.paymentStatus.name() == 'PAID'}" class="badge-pill badge-paid">
+                                        <i class="bi bi-cash-coin"></i> Đã thu
+                                    </span>
+                                    <span th:if="${item.paymentStatus != null and item.paymentStatus.name() == 'UNPAID'}" class="badge-pill badge-unpaid">
+                                        <i class="bi bi-wallet2"></i> Chưa thu
+                                    </span>
+                                </td>
+
+                                <td class="text-nowrap">
+                                    <div class="action-group">
+                                        <a th:href="@{'/return-records/edit/' + ${item.id}}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil-square me-1"></i> Sửa
+                                        </a>
+                                        <a th:href="@{'/return-records/' + ${item.id} + '/receipt'}"
+                                           class="btn btn-sm btn-outline-dark"
+                                           target="_blank">
+                                            <i class="bi bi-printer me-1"></i> In biên lai
+                                        </a>
+                                        <a th:href="@{'/return-records/delete/' + ${item.id}}"
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Bạn có chắc muốn xóa phiếu trả này không?');">
+                                            <i class="bi bi-trash3 me-1"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

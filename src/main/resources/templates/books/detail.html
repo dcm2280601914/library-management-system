@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi tiết sách</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf5;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --card-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            --radius-xl: 22px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f1f5f9 100%);
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-main);
+        }
+
+        .page-container {
+            padding: 24px;
+        }
+
+        .hero-card {
+            border: none;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 45%, #60a5fa 100%);
+            color: white;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -30px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.10);
+            border-radius: 50%;
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: 70px;
+            bottom: -80px;
+            width: 160px;
+            height: 160px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            margin-bottom: 0;
+        }
+
+        .hero-btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 10px 16px;
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.14);
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero-btn:hover {
+            background: rgba(255,255,255,0.22);
+            color: white;
+        }
+
+        .main-card {
+            margin-top: 24px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .card-body-custom {
+            padding: 24px;
+        }
+
+        .cover-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .book-cover {
+            width: 180px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 18px;
+            border: 1px solid #dbe2ea;
+            background: white;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .cover-placeholder {
+            width: 180px;
+            height: 240px;
+            margin: 0 auto 16px;
+            border-radius: 18px;
+            border: 1px dashed #cbd5e1;
+            background: #f8fafc;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 16px;
+        }
+
+        .book-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .book-sub {
+            color: var(--text-sub);
+            margin-bottom: 0;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            height: 100%;
+        }
+
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .info-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        .badge-soft {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .badge-category {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .stock-good {
+            color: #15803d;
+            font-weight: 800;
+        }
+
+        .stock-empty {
+            color: #dc2626;
+            font-weight: 800;
+        }
+
+        .description-box {
+            margin-top: 18px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .description-text {
+            color: #334155;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 11px 18px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-soft {
+            background: #eef2ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+        }
+
+        .btn-soft:hover {
+            background: #e0e7ff;
+            color: #312e81;
+        }
+
+        @media (max-width: 991.98px) {
+            .page-container {
+                padding: 16px;
+            }
+
+            .hero-title {
+                font-size: 1.55rem;
+            }
+
+            .card-body-custom {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-title {
+                font-size: 1.3rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-cover,
+            .cover-placeholder {
+                width: 150px;
+                height: 210px;
+            }
+
+            .action-bar .btn,
+            .action-bar a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid page-container">
+
+    <div class="card hero-card">
+        <div class="card-body p-4 p-lg-5">
+            <div class="row align-items-center g-4 hero-content">
+                <div class="col-lg-8">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-4 bg-white bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+                             style="width:64px;height:64px;">
+                            <i class="bi bi-book fs-3"></i>
+                        </div>
+                        <div>
+                            <h1 class="hero-title">Chi tiết sách</h1>
+                            <p class="hero-subtitle">
+                                Xem đầy đủ thông tin đầu sách, tình trạng kho và dữ liệu mô tả.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a th:href="@{/books}" class="hero-btn">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                        </a>
+                        <a th:href="@{/books/edit/{id}(id=${book.id})}" class="hero-btn">
+                            <i class="bi bi-pencil-square me-2"></i>Sửa sách
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <span class="badge bg-light text-primary fs-6 px-3 py-2">
+                        Mã sách: <span th:text="${book.id}">1</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-card">
+        <div class="card-body-custom">
+            <div class="row g-4">
+                <div class="col-12 col-lg-4">
+                    <div class="cover-card">
+                        <img th:if="${book.coverImage != null and !#strings.isEmpty(book.coverImage)}"
+                             th:src="${book.coverImage}"
+                             alt="cover"
+                             class="book-cover">
+
+                        <div th:if="${book.coverImage == null or #strings.isEmpty(book.coverImage)}"
+                             class="cover-placeholder">
+                            Không có ảnh bìa
+                        </div>
+
+                        <div class="book-name" th:text="${book.title}">Tên sách</div>
+                        <p class="book-sub">
+                            <span th:text="${book.author != null and !#strings.isEmpty(book.author) ? book.author : 'Chưa cập nhật tác giả'}"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-8">
+                    <div class="info-card">
+                        <div class="section-title">
+                            <i class="bi bi-info-circle me-2"></i>Thông tin chi tiết
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">ID</div>
+                                <div class="info-value" th:text="${book.id}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Tên sách</div>
+                                <div class="info-value" th:text="${book.title}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Thể loại</div>
+                                <div class="info-value">
+                                    <span class="badge-soft badge-category"
+                                          th:text="${book.category != null ? book.category.name : 'Chưa có'}"></span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Tác giả</div>
+                                <div class="info-value"
+                                     th:text="${book.author != null and !#strings.isEmpty(book.author) ? book.author : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Nhà xuất bản</div>
+                                <div class="info-value"
+                                     th:text="${book.publisher != null and !#strings.isEmpty(book.publisher) ? book.publisher : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Năm xuất bản</div>
+                                <div class="info-value" th:text="${book.publicationYear}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">ISBN</div>
+                                <div class="info-value"
+                                     th:text="${book.isbn != null and !#strings.isEmpty(book.isbn) ? book.isbn : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Barcode</div>
+                                <div class="info-value"
+                                     th:text="${book.barcode != null and !#strings.isEmpty(book.barcode) ? book.barcode : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Vị trí lưu trữ</div>
+                                <div class="info-value"
+                                     th:text="${book.location != null and !#strings.isEmpty(book.location) ? book.location : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Ngày nhập kho</div>
+                                <div class="info-value"
+                                     th:text="${book.importDate != null ? book.importDate : 'Chưa cập nhật'}">
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Tổng số lượng</div>
+                                <div class="info-value" th:text="${book.totalQuantity}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Số lượng còn lại</div>
+                                <div class="info-value">
+                                    <span th:text="${book.availableQuantity}"
+                                          th:classappend="${book.availableQuantity == 0} ? 'stock-empty' : 'stock-good'">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-box">
+                            <div class="info-label mb-2">Mô tả</div>
+                            <div class="description-text"
+                                 th:text="${book.description != null and !#strings.isEmpty(book.description) ? book.description : 'Chưa có mô tả cho sách này.'}">
+                            </div>
+                        </div>
+
+                        <div class="action-bar">
+                            <a th:href="@{/books}" class="btn btn-soft">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                            </a>
+                            <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-primary">
+                                <i class="bi bi-pencil-square me-2"></i>Sửa thông tin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

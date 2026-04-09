@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết thể loại</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf5;
+            --warning-soft: #fff7ed;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            color: var(--text-main);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            border: 1px solid #dbeafe;
+        }
+
+        .category-icon {
+            width: 82px;
+            height: 82px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            color: #1d4ed8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            box-shadow: 0 12px 24px rgba(37,99,235,0.14);
+        }
+
+        .category-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .category-sub {
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 16px;
+            min-height: 100%;
+        }
+
+        .info-label {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        .badge-soft {
+            font-size: 0.82rem;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .badge-visible {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-hidden {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .stats-card {
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid transparent;
+            height: 100%;
+        }
+
+        .stats-card .icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .stats-card .title {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stats-card .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .stats-primary {
+            background: var(--primary-soft);
+            border-color: #bfdbfe;
+        }
+
+        .stats-primary .icon {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .stats-success {
+            background: var(--success-soft);
+            border-color: #bbf7d0;
+        }
+
+        .stats-success .icon {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .stats-warning {
+            background: var(--warning-soft);
+            border-color: #fed7aa;
+        }
+
+        .stats-warning .icon {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .profile-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .category-icon {
+                width: 68px;
+                height: 68px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-folder2-open"></i>
+                            Thông tin thể loại
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Chi tiết thể loại</h1>
+                        <p class="hero-subtitle mb-0">
+                            Xem thông tin thể loại, trạng thái hiển thị và mức độ sử dụng
+                            của thể loại sách trong toàn bộ hệ thống thư viện.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/categories}" class="btn btn-light-soft">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                        </a>
+                        <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-light-soft">
+                            <i class="bi bi-pencil-square me-1"></i> Sửa thể loại
+                        </a>
+                        <a th:href="@{/categories/toggle-status/{id}(id=${category.id})}" class="btn btn-light-soft"
+                           th:text="${category.status.name() == 'VISIBLE' ? 'Ẩn thể loại' : 'Hiện thể loại'}">
+                            Ẩn thể loại
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card soft-card h-100">
+                    <div class="card-body p-4 p-lg-4">
+                        <div class="mb-4">
+                            <h2 class="section-title mb-1">Thông tin thể loại</h2>
+                            <div class="section-subtitle">Thông tin cơ bản và trạng thái hiện tại</div>
+                        </div>
+
+                        <div class="profile-box mb-4">
+                            <div class="category-icon">
+                                <i class="bi bi-bookmark-star-fill"></i>
+                            </div>
+                            <div>
+                                <div class="category-name" th:text="${category.name}">Tên thể loại</div>
+                                <p class="category-sub">
+                                    ID:
+                                    <strong th:text="${category.id}">1</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-hash"></i>ID thể loại</div>
+                                <div class="info-value" th:text="${category.id}">1</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-tag"></i>Tên thể loại</div>
+                                <div class="info-value" th:text="${category.name}">Tên thể loại</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-info-circle"></i>Mô tả</div>
+                                <div class="info-value"
+                                     th:text="${category.description != null and !#strings.isEmpty(category.description) ? category.description : 'Chưa có mô tả cho thể loại này.'}">
+                                    Chưa có mô tả
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-eye"></i>Trạng thái</div>
+                                <div class="info-value">
+                                    <span class="badge badge-soft"
+                                          th:classappend="${category.status.name() == 'VISIBLE' ? ' badge-visible' : ' badge-hidden'}"
+                                          th:text="${category.status.name() == 'VISIBLE' ? 'Hiển thị' : 'Ẩn'}">
+                                        Hiển thị
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 mt-4">
+                            <a th:href="@{/categories}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Quay lại
+                            </a>
+                            <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-primary">
+                                <i class="bi bi-pencil-square me-1"></i> Sửa
+                            </a>
+                            <a th:href="@{/categories/toggle-status/{id}(id=${category.id})}" class="btn btn-outline-warning"
+                               th:text="${category.status.name() == 'VISIBLE' ? 'Ẩn thể loại' : 'Hiện thể loại'}">
+                                Ẩn thể loại
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="row g-3">
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-primary">
+                            <div class="icon"><i class="bi bi-journal-bookmark"></i></div>
+                            <div class="title">Số lượng sách</div>
+                            <div class="value" th:text="${category.bookCount}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-success">
+                            <div class="icon"><i class="bi bi-arrow-left-right"></i></div>
+                            <div class="title">Số lượt mượn</div>
+                            <div class="value" th:text="${category.borrowCount}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="stats-card stats-warning">
+                            <div class="icon"><i class="bi bi-eye"></i></div>
+                            <div class="title">Trạng thái hiển thị</div>
+                            <div class="value" style="font-size:1.1rem;"
+                                 th:text="${category.status.name() == 'VISIBLE' ? 'Đang hiển thị' : 'Đang ẩn'}">
+                                Đang hiển thị
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

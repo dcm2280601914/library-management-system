@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết người mượn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf5;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            border: 1px solid #dbeafe;
+        }
+
+        .avatar-circle {
+            width: 82px;
+            height: 82px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 12px 24px rgba(37,99,235,0.22);
+            flex-shrink: 0;
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-sub {
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 16px;
+            min-height: 100%;
+        }
+
+        .info-label {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        .stats-card {
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid transparent;
+            height: 100%;
+        }
+
+        .stats-card .icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .stats-card .title {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stats-card .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .stats-primary {
+            background: var(--primary-soft);
+            border-color: #bfdbfe;
+        }
+
+        .stats-primary .icon {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .stats-success {
+            background: var(--success-soft);
+            border-color: #bbf7d0;
+        }
+
+        .stats-success .icon {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .stats-warning {
+            background: var(--warning-soft);
+            border-color: #fed7aa;
+        }
+
+        .stats-warning .icon {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .stats-danger {
+            background: var(--danger-soft);
+            border-color: #fecaca;
+        }
+
+        .stats-danger .icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-soft {
+            font-size: 0.82rem;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .badge-status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-status-locked {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-status-debt {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-level-bronze {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .badge-level-silver {
+            background: #ecfeff;
+            color: #0f766e;
+        }
+
+        .badge-level-gold {
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .custom-table {
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
+        .custom-table thead th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            padding: 14px 12px;
+        }
+
+        .custom-table td {
+            padding: 14px 12px;
+            border-color: #eef2f7;
+        }
+
+        .custom-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .table-book-title {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .table-subtext {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 36px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            display: block;
+            color: #94a3b8;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .profile-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .avatar-circle {
+                width: 68px;
+                height: 68px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-person-vcard-fill"></i>
+                            Hồ sơ thành viên thư viện
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Chi tiết người mượn</h1>
+                        <p class="hero-subtitle mb-0">
+                            Xem tổng quan hồ sơ người mượn, trạng thái tài khoản,
+                            hạn mức mượn và lịch sử mượn / trả sách trên cùng một màn hình.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/borrowers}" class="btn btn-light-soft">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                        </a>
+                        <a th:href="@{/borrowers/edit/{id}(id=${borrower.id})}" class="btn btn-light-soft">
+                            <i class="bi bi-pencil-square me-1"></i> Sửa thông tin
+                        </a>
+                        <a th:href="@{/borrowers/send-notification/{id}(id=${borrower.id})}" class="btn btn-light-soft">
+                            <i class="bi bi-bell me-1"></i> Gửi thông báo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="card soft-card h-100">
+                    <div class="card-body p-4 p-lg-4">
+
+                        <div class="mb-4">
+                            <h2 class="section-title mb-1">Thông tin người mượn</h2>
+                            <div class="section-subtitle">Hồ sơ chi tiết và trạng thái hiện tại trong hệ thống</div>
+                        </div>
+
+                        <div class="profile-box mb-4">
+                            <div class="avatar-circle"
+                                 th:text="${borrower.fullName != null and borrower.fullName.length() > 0 ? borrower.fullName.substring(0,1).toUpperCase() : 'U'}">
+                                U
+                            </div>
+                            <div>
+                                <div class="profile-name" th:text="${borrower.fullName ?: 'Chưa cập nhật họ tên'}"></div>
+                                <p class="profile-sub">
+                                    Mã thẻ:
+                                    <strong th:text="${borrower.cardNumber ?: '---'}"></strong>
+                                    &nbsp;•&nbsp;
+                                    Email:
+                                    <strong th:text="${borrower.email ?: '---'}"></strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-hash"></i>ID người mượn</div>
+                                <div class="info-value" th:text="${borrower.id ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-upc-scan"></i>QR / Barcode</div>
+                                <div class="info-value" th:text="${borrower.qrCode ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-telephone"></i>Số điện thoại</div>
+                                <div class="info-value" th:text="${borrower.phone ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-envelope"></i>Email</div>
+                                <div class="info-value" th:text="${borrower.email ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-geo-alt"></i>Địa chỉ</div>
+                                <div class="info-value" th:text="${borrower.address ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-calendar-event"></i>Ngày tạo</div>
+                                <div class="info-value" th:text="${borrower.createdDate ?: '---'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-shield-check"></i>Trạng thái</div>
+                                <div class="info-value">
+                                    <span class="badge badge-soft"
+                                          th:classappend="${borrower.status != null and borrower.status.name() == 'ACTIVE'} ? ' badge-status-active' :
+                                                          (${borrower.status != null and borrower.status.name() == 'LOCKED'} ? ' badge-status-locked' : ' badge-status-debt')"
+                                          th:text="${borrower.status != null and borrower.status.name() == 'ACTIVE' ? 'Đang hoạt động'
+                                                   : (borrower.status != null and borrower.status.name() == 'LOCKED' ? 'Bị khóa' : 'Đang nợ sách')}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-award"></i>Hạng thành viên</div>
+                                <div class="info-value">
+                                    <span class="badge badge-soft"
+                                          th:classappend="${borrower.membershipLevel != null and borrower.membershipLevel.name() == 'BRONZE'} ? ' badge-level-bronze' :
+                                                          (${borrower.membershipLevel != null and borrower.membershipLevel.name() == 'SILVER'} ? ' badge-level-silver' : ' badge-level-gold')"
+                                          th:text="${borrower.membershipLevel != null and borrower.membershipLevel.name() == 'BRONZE' ? 'Đồng'
+                                                   : (borrower.membershipLevel != null and borrower.membershipLevel.name() == 'SILVER' ? 'Bạc' : 'Vàng')}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-toggle-on"></i>Kích hoạt</div>
+                                <div class="info-value" th:text="${borrower.active ? 'Đang dùng' : 'Ngưng dùng'}"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label"><i class="bi bi-check2-circle"></i>Được phép mượn tiếp</div>
+                                <div class="info-value" th:text="${borrower.allowedToBorrow ? 'Có' : 'Không'}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="row g-3">
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-primary">
+                            <div class="icon"><i class="bi bi-star-fill"></i></div>
+                            <div class="title">Điểm uy tín</div>
+                            <div class="value" th:text="${borrower.reputationScore ?: 0}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-success">
+                            <div class="icon"><i class="bi bi-journal-check"></i></div>
+                            <div class="title">Đang mượn</div>
+                            <div class="value" th:text="${borrower.borrowProgress ?: 0}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-warning">
+                            <div class="icon"><i class="bi bi-plus-circle"></i></div>
+                            <div class="title">Còn được mượn thêm</div>
+                            <div class="value" th:text="${borrower.remainingBorrowLimit ?: 0}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-12 col-xl-6">
+                        <div class="stats-card stats-danger">
+                            <div class="icon"><i class="bi bi-clock-history"></i></div>
+                            <div class="title">Số lần trả muộn</div>
+                            <div class="value" th:text="${borrower.lateReturnCount ?: 0}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card soft-card">
+            <div class="card-body p-4 p-lg-4">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center mb-3 gap-2">
+                    <div>
+                        <h2 class="section-title mb-1">Lịch sử mượn / trả sách</h2>
+                        <div class="section-subtitle">Theo dõi chi tiết quá trình mượn và hoàn trả sách</div>
+                    </div>
+                    <div class="text-muted small">
+                        Tổng số bản ghi:
+                        <strong th:text="${borrowHistory != null ? #lists.size(borrowHistory) : 0}">0</strong>
+                    </div>
+                </div>
+
+                <div th:if="${borrowHistory == null || #lists.isEmpty(borrowHistory)}" class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <div class="fw-semibold mb-1">Chưa có lịch sử mượn / trả</div>
+                    <div>Dữ liệu sẽ hiển thị tại đây khi người dùng bắt đầu mượn sách.</div>
+                </div>
+
+                <div th:if="${borrowHistory != null && !#lists.isEmpty(borrowHistory)}" class="table-wrap">
+                    <div class="table-responsive">
+                        <table class="table custom-table align-middle">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Phiếu mượn</th>
+                                <th>Sách</th>
+                                <th>Ngày mượn</th>
+                                <th>Hạn trả</th>
+                                <th>Ngày trả</th>
+                                <th>Tiền phạt</th>
+                                <th>Trạng thái mượn</th>
+                                <th>Trạng thái trả</th>
+                                <th>Ghi chú</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${borrowHistory}">
+                                <td>
+                                    <span class="fw-semibold" th:text="${item.borrowRecordId ?: '---'}"></span>
+                                </td>
+
+                                <td>
+                                    <span class="fw-semibold" th:text="${item.borrowCode ?: '---'}"></span>
+                                </td>
+
+                                <td>
+                                    <div class="table-book-title" th:text="${item.bookTitle ?: '---'}"></div>
+                                </td>
+
+                                <td th:text="${item.borrowDate ?: '---'}"></td>
+                                <td th:text="${item.dueDate ?: '---'}"></td>
+                                <td th:text="${item.returnDate ?: 'Chưa trả'}"></td>
+
+                                <td>
+                                    <span class="fw-semibold text-danger"
+                                          th:text="${item.fineAmount != null ? #numbers.formatDecimal(item.fineAmount, 1, 'COMMA', 2, 'POINT') + ' đ' : '0 đ'}"></span>
+                                </td>
+
+                                <td>
+                                    <span class="badge text-bg-primary"
+                                          th:text="${item.borrowStatus != null ? item.borrowStatus : '---'}"></span>
+                                </td>
+
+                                <td>
+                                    <span class="badge text-bg-secondary"
+                                          th:text="${item.returnStatus != null ? item.returnStatus : '---'}"></span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${item.overdue}" class="badge text-bg-danger">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Đang quá hạn
+                                    </span>
+                                    <span th:if="${!item.overdue}" class="badge text-bg-success">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Bình thường
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

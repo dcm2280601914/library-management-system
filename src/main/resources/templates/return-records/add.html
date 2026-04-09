@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm phiếu trả</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf3;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            color: var(--text-main);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 48px;
+            border-radius: 14px;
+            border-color: #dbe2ea;
+            box-shadow: none !important;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .preview-box {
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .preview-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            color: #1d4ed8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            margin-bottom: 14px;
+        }
+
+        .preview-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .preview-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            min-height: 54px;
+            margin-bottom: 14px;
+        }
+
+        .info-box {
+            margin-top: 12px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        .info-note {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e3a8a;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 0.94rem;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .sticky-side {
+            position: sticky;
+            top: 24px;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .sticky-side {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-journal-check"></i>
+                            Tạo phiếu trả sách
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Thêm phiếu trả sách</h1>
+                        <p class="hero-subtitle mb-0">
+                            Chọn phiếu mượn, nhập ngày trả và tình trạng sách.
+                            Hệ thống sẽ tự tính số ngày trễ, tiền phạt, lý do phạt và trạng thái thanh toán sau khi lưu.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/return-records}" class="btn btn-light-soft">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger shadow-sm mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <form th:action="@{/return-records/add}" th:object="${returnRecord}" method="post">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card soft-card h-100">
+                        <div class="card-body p-4 p-lg-4">
+
+                            <div class="mb-4">
+                                <h2 class="section-title mb-1">Thông tin phiếu trả</h2>
+                                <div class="section-subtitle">Chọn phiếu mượn đang hoạt động và nhập dữ liệu trả sách</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Phiếu mượn <span class="text-danger">*</span></label>
+                                <select class="form-select" th:field="*{borrowRecord.id}" id="borrowRecordInput" required>
+                                    <option value="">-- Chọn phiếu mượn --</option>
+                                    <option th:each="br : ${borrowRecords}"
+                                            th:value="${br.id}"
+                                            th:text="${br.borrowCode + ' | ' + br.borrower.fullName + ' | ' + br.book.title + ' | Hạn trả: ' + br.dueDate}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Chỉ hiển thị các phiếu đang ở trạng thái mượn.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ngày trả <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" th:field="*{returnDate}" id="returnDateInput" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tình trạng sách khi trả <span class="text-danger">*</span></label>
+                                <select class="form-select" th:field="*{bookCondition}" id="bookConditionInput" required>
+                                    <option value="INTACT">Nguyên vẹn</option>
+                                    <option value="MINOR_DAMAGE">Hư hỏng nhẹ</option>
+                                    <option value="SEVERE_DAMAGE">Hư hỏng nặng</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea class="form-control"
+                                          th:field="*{note}"
+                                          id="noteInput"
+                                          rows="4"
+                                          placeholder="Ví dụ: sách còn tốt, giao đủ sách, kiểm tra nhanh khi nhận..."></textarea>
+                            </div>
+
+                            <div class="info-note">
+                                <strong>Lưu ý:</strong>
+                                Số ngày trễ, tiền phạt, lý do phạt và trạng thái thanh toán sẽ được hệ thống tự động tính sau khi lưu.
+                            </div>
+
+                            <div class="d-flex gap-2 flex-wrap mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i> Lưu phiếu trả
+                                </button>
+                                <a th:href="@{/return-records}" class="btn btn-outline-secondary">
+                                    Hủy
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sticky-side">
+                        <div class="preview-box">
+                            <div class="mb-3">
+                                <h2 class="section-title mb-1">Xem trước</h2>
+                                <div class="section-subtitle">Tóm tắt thông tin phiếu trả trước khi lưu</div>
+                            </div>
+
+                            <div class="preview-icon">
+                                <i class="bi bi-receipt-cutoff"></i>
+                            </div>
+
+                            <div class="preview-name" id="previewCode">Chưa chọn phiếu mượn</div>
+                            <div class="preview-desc" id="previewDesc">
+                                Thông tin người mượn, sách và ngày trả sẽ hiển thị tại đây.
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-label">Người mượn</div>
+                                <div class="info-value" id="previewBorrower">Chưa chọn</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-label">Sách</div>
+                                <div class="info-value" id="previewBook">Chưa chọn</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-label">Hạn trả</div>
+                                <div class="info-value" id="previewDueDate">Chưa có</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-label">Ngày trả</div>
+                                <div class="info-value" id="previewReturnDate">Chưa chọn</div>
+                            </div>
+
+                            <div class="info-box">
+                                <div class="info-label">Tình trạng sách</div>
+                                <div class="info-value" id="previewCondition">Nguyên vẹn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const borrowRecordInput = document.getElementById('borrowRecordInput');
+    const returnDateInput = document.getElementById('returnDateInput');
+    const bookConditionInput = document.getElementById('bookConditionInput');
+    const noteInput = document.getElementById('noteInput');
+
+    const previewCode = document.getElementById('previewCode');
+    const previewDesc = document.getElementById('previewDesc');
+    const previewBorrower = document.getElementById('previewBorrower');
+    const previewBook = document.getElementById('previewBook');
+    const previewDueDate = document.getElementById('previewDueDate');
+    const previewReturnDate = document.getElementById('previewReturnDate');
+    const previewCondition = document.getElementById('previewCondition');
+
+    function parseBorrowRecordText(text) {
+        if (!text || text.trim() === '-- Chọn phiếu mượn --') {
+            return {
+                code: 'Chưa chọn phiếu mượn',
+                borrower: 'Chưa chọn',
+                book: 'Chưa chọn',
+                dueDate: 'Chưa có'
+            };
+        }
+
+        const parts = text.split('|').map(item => item.trim());
+        const code = parts[0] || 'Chưa chọn phiếu mượn';
+        const borrower = parts[1] || 'Chưa chọn';
+        const book = parts[2] || 'Chưa chọn';
+        const duePart = parts[3] || '';
+        const dueDate = duePart.replace('Hạn trả:', '').trim() || 'Chưa có';
+
+        return { code, borrower, book, dueDate };
+    }
+
+    function getConditionLabel(value) {
+        if (value === 'INTACT') return 'Nguyên vẹn';
+        if (value === 'MINOR_DAMAGE') return 'Hư hỏng nhẹ';
+        if (value === 'SEVERE_DAMAGE') return 'Hư hỏng nặng';
+        return 'Chưa chọn';
+    }
+
+    function updatePreview() {
+        const selectedText = borrowRecordInput.options[borrowRecordInput.selectedIndex]
+            ? borrowRecordInput.options[borrowRecordInput.selectedIndex].text
+            : '';
+
+        const parsed = parseBorrowRecordText(selectedText);
+        const returnDate = returnDateInput.value || 'Chưa chọn';
+        const condition = getConditionLabel(bookConditionInput.value);
+        const note = noteInput.value.trim();
+
+        previewCode.textContent = parsed.code;
+        previewBorrower.textContent = parsed.borrower;
+        previewBook.textContent = parsed.book;
+        previewDueDate.textContent = parsed.dueDate;
+        previewReturnDate.textContent = returnDate;
+        previewCondition.textContent = condition;
+
+        previewDesc.textContent =
+            'Phiếu trả cho ' + parsed.borrower +
+            ', sách: ' + parsed.book +
+            ', tình trạng: ' + condition +
+            (note ? '. Ghi chú: ' + note : '.');
+    }
+
+    if (!returnDateInput.value) {
+        const today = new Date().toISOString().split('T')[0];
+        returnDateInput.value = today;
+    }
+
+    borrowRecordInput.addEventListener('change', updatePreview);
+    returnDateInput.addEventListener('change', updatePreview);
+    bookConditionInput.addEventListener('change', updatePreview);
+    noteInput.addEventListener('input', updatePreview);
+
+    updatePreview();
+</script>
+</body>
+</html>

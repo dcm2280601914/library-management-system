@@ -1,0 +1,8 @@
+package com.example.librarymanagementsystem.enums;
+
+public enum ReturnStatus {
+    RETURNED,   // Trả bình thường
+    LATE,       // Trả trễ
+    DAMAGED,    // Sách hư hỏng
+    LOST        // Mất sách
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết nhân viên</title>
+    <style>
+        body { font-family: Arial; margin: 30px; }
+        .box {
+            width: 600px;
+            border: 1px solid #999;
+            padding: 20px;
+        }
+        p { margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<h1>Chi tiết nhân viên</h1>
+
+<div class="box">
+    <p><strong>ID:</strong> <span th:text="${employee.id}"></span></p>
+    <p><strong>Họ tên:</strong> <span th:text="${employee.fullName}"></span></p>
+    <p><strong>Username:</strong> <span th:text="${employee.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${employee.email}"></span></p>
+    <p><strong>Phone:</strong> <span th:text="${employee.phone}"></span></p>
+    <p><strong>Role:</strong> <span th:text="${employee.role}"></span></p>
+    <p><strong>Trạng thái:</strong>
+        <span th:text="${employee.active ? 'Hoạt động' : 'Khóa'}"></span>
+    </p>
+</div>
+
+<br>
+<a th:href="@{/employees}">Quay lại</a>
+<a th:href="@{/employees/edit/{id}(id=${employee.id})}">Sửa</a>
+
+</body>
+</html>
