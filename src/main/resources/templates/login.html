@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập hệ thống thư viện</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1f2937;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 32px 28px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .brand-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 12px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 10px 24px rgba(37, 99,, 235, 0.25);
+        }
+
+        .brand h2 {
+            margin: 0 0 8px;
+            font-size: 26px;
+            color: #111827;
+        }
+
+        .brand p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .alert {
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .btn-login {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 16px;
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 18px;
+                border-radius: 14px;
+            }
+
+            .brand h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="brand">
+            <div class="brand-icon">📚</div>
+            <h2>Đăng nhập</h2>
+            <p>Hệ thống quản lý thư viện</p>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-error">
+            Sai tên đăng nhập hoặc mật khẩu.
+        </div>
+
+        <div th:if="${param.logout}" class="alert alert-success">
+            Đăng xuất thành công.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label class="form-label">Tên đăng nhập</label>
+                <input type="text" name="username" class="form-control" placeholder="Nhập tên đăng nhập" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
+            </div>
+
+            <button type="submit" class="btn-login">Đăng nhập</button>
+        </form>
+
+        <div class="footer-text">
+            Quản lý nhân viên, sách, mượn trả và vận hành thư viện
+        </div>
+    </div>
+</div>
+</body>
+</html>

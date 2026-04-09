@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý người mượn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf3;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --info-soft: #ecfeff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --page-bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .soft-card,
+        .filter-card,
+        .stat-card {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .stat-card {
+            padding: 18px;
+            height: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.primary {
+            background: var(--primary-soft);
+            color: var(--primary-color);
+        }
+
+        .stat-icon.success {
+            background: var(--success-soft);
+            color: #16a34a;
+        }
+
+        .stat-icon.danger {
+            background: var(--danger-soft);
+            color: #dc2626;
+        }
+
+        .stat-icon.warning {
+            background: var(--warning-soft);
+            color: #ea580c;
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 48px;
+            border-radius: 14px;
+            border-color: #dbe2ea;
+            box-shadow: none !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .search-input-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid #dbe2ea;
+            border-radius: 14px;
+            background: #fff;
+            min-height: 48px;
+            padding: 0 12px;
+        }
+
+        .search-input-group:focus-within {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+        }
+
+        .search-input-group i {
+            color: var(--primary-color);
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+
+        .search-input-group input {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            min-height: 44px;
+            padding-left: 0;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 0.95rem 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #eef2f7;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .borrower-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 240px;
+        }
+
+        .avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            color: #1d4ed8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .borrower-name {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .borrower-meta,
+        .contact-subtext,
+        .small-muted {
+            color: var(--text-muted);
+            font-size: 0.86rem;
+        }
+
+        .contact-block {
+            min-width: 190px;
+        }
+
+        .badge-pill {
+            border-radius: 999px;
+            padding: 0.55rem 0.82rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-active {
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+        .status-locked {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .status-overdue {
+            background: #fff7ed;
+            color: #d97706;
+        }
+
+        .level-bronze {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .level-silver {
+            background: #ecfeff;
+            color: #0f766e;
+        }
+
+        .level-gold {
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        .borrow-box {
+            min-width: 120px;
+        }
+
+        .borrow-progress {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.5rem 0.8rem;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .action-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .action-group .btn {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.88rem;
+            border-radius: 12px;
+        }
+
+        .empty-state {
+            padding: 3.5rem 1rem;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 82px;
+            height: 82px;
+            border-radius: 24px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .pagination .page-link {
+            border: none;
+            margin: 0 4px;
+            border-radius: 12px !important;
+            color: #334155;
+            min-width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #2563eb;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .table-footer-note {
+            color: #64748b;
+            font-size: 0.92rem;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .text-truncate-2 {
+            max-width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .text-truncate-2 {
+                max-width: 180px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .text-truncate-2 {
+                max-width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <!-- Header -->
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-people-fill"></i>
+                            Quản lý thành viên thư viện
+                        </div>
+
+                        <h1 class="hero-title h2 mb-2">Quản lý người mượn</h1>
+                        <p class="hero-subtitle mb-0">
+                            Theo dõi, tìm kiếm và quản lý thông tin người mượn theo trạng thái, hạng thành viên,
+                            giới hạn mượn và các thao tác nhanh trên cùng một màn hình.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/}" class="btn btn-light-soft">
+                            <i class="bi bi-house-door me-1"></i> Trang chủ
+                        </a>
+                        <a th:href="@{/borrowers/scan}" class="btn btn-light-soft">
+                            <i class="bi bi-upc-scan me-1"></i> Quét QR
+                        </a>
+                        <a th:href="@{/borrowers/add}" class="btn btn-light-soft">
+                            <i class="bi bi-plus-circle me-1"></i> Thêm người mượn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div th:if="${successMessage}" class="alert alert-success shadow-sm mb-4">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger shadow-sm mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Tổng người mượn</div>
+                            <div class="fs-3 fw-bold mt-1"
+                                 th:text="${borrowerPage != null ? borrowerPage.totalElements : 0}">0</div>
+                            <div class="section-subtitle mt-1">Tất cả bản ghi trong hệ thống</div>
+                        </div>
+                        <div class="stat-icon primary">
+                            <i class="bi bi-people"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Đang hoạt động</div>
+                            <div class="fs-3 fw-bold mt-1 text-success"
+                                 th:text="${borrowers != null ? #lists.size(borrowers.?[status != null and status.name() == 'ACTIVE']) : 0}">
+                                0
+                            </div>
+                            <div class="section-subtitle mt-1">Có thể mượn sách bình thường</div>
+                        </div>
+                        <div class="stat-icon success">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Bị khóa</div>
+                            <div class="fs-3 fw-bold mt-1 text-danger"
+                                 th:text="${borrowers != null ? #lists.size(borrowers.?[status != null and status.name() == 'LOCKED']) : 0}">
+                                0
+                            </div>
+                            <div class="section-subtitle mt-1">Cần xử lý trạng thái tài khoản</div>
+                        </div>
+                        <div class="stat-icon danger">
+                            <i class="bi bi-lock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="section-subtitle">Bản ghi trang hiện tại</div>
+                            <div class="fs-3 fw-bold mt-1 text-primary"
+                                 th:text="${borrowers != null ? #lists.size(borrowers) : 0}">
+                                0
+                            </div>
+                            <div class="section-subtitle mt-1">Số dòng đang hiển thị</div>
+                        </div>
+                        <div class="stat-icon warning">
+                            <i class="bi bi-grid"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="card filter-card mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center mb-3 gap-2">
+                    <div>
+                        <h2 class="section-title mb-1">Bộ lọc tìm kiếm</h2>
+                        <div class="section-subtitle">
+                            Tìm nhanh theo tên, email, số điện thoại, mã thẻ, trạng thái và hạng thành viên
+                        </div>
+                    </div>
+                </div>
+
+                <form th:action="@{/borrowers}" method="get" class="row g-3">
+                    <input type="hidden" name="page" value="0">
+                    <input type="hidden" name="sortField" th:value="${sortField}">
+                    <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+                    <div class="col-lg-4">
+                        <label class="form-label">Từ khóa</label>
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text"
+                                   name="keyword"
+                                   class="form-control"
+                                   placeholder="Tên, email, SĐT, mã thẻ..."
+                                   th:value="${keyword}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <label class="form-label">Trạng thái</label>
+                        <select name="status" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option th:each="s : ${statuses}"
+                                    th:value="${s}"
+                                    th:selected="${selectedStatus == s}"
+                                    th:text="${s == T(com.example.libmanagement.enums.BorrowerStatus).ACTIVE ? 'Đang hoạt động'
+                                            : (s == T(com.example.libmanagement.enums.BorrowerStatus).LOCKED ? 'Bị khóa' : 'Đang nợ sách')}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <label class="form-label">Hạng thành viên</label>
+                        <select name="membershipLevel" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option th:each="m : ${membershipLevels}"
+                                    th:value="${m}"
+                                    th:selected="${selectedMembershipLevel == m}"
+                                    th:text="${m == T(com.example.libmanagement.enums.MembershipLevel).BRONZE ? 'Đồng'
+                                            : (m == T(com.example.libmanagement.enums.MembershipLevel).SILVER ? 'Bạc' : 'Vàng')}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <label class="form-label">Kích hoạt</label>
+                        <select name="active" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="true" th:selected="${selectedActive != null and selectedActive == true}">Đang dùng</option>
+                            <option value="false" th:selected="${selectedActive != null and selectedActive == false}">Ngưng dùng</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <label class="form-label">Kích thước trang</label>
+                        <select name="size" class="form-select">
+                            <option value="5" th:selected="${size == 5}">5 bản ghi</option>
+                            <option value="10" th:selected="${size == 10}">10 bản ghi</option>
+                            <option value="20" th:selected="${size == 20}">20 bản ghi</option>
+                            <option value="50" th:selected="${size == 50}">50 bản ghi</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 d-flex gap-2 flex-wrap">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel me-1"></i> Lọc dữ liệu
+                        </button>
+                        <a th:href="@{/borrowers}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Làm mới
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card soft-card">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center mb-3 gap-2">
+                    <div>
+                        <h2 class="section-title mb-1">Danh sách người mượn</h2>
+                        <div class="section-subtitle">
+                            Theo dõi thông tin cá nhân, trạng thái tài khoản, hạng thành viên và tiến độ mượn sách
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${borrowers == null or #lists.isEmpty(borrowers)}" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-inbox"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Không có dữ liệu người mượn</h5>
+                    <p class="text-muted mb-3">
+                        Hiện chưa có người mượn nào phù hợp với điều kiện tìm kiếm của bạn.
+                    </p>
+                    <a th:href="@{/borrowers}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-repeat me-1"></i> Xem lại tất cả
+                    </a>
+                </div>
+
+                <div th:if="${borrowers != null and !#lists.isEmpty(borrowers)}" class="table-wrap">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 80px;">ID</th>
+                                <th style="min-width: 280px;">Người mượn</th>
+                                <th style="min-width: 220px;">Liên hệ</th>
+                                <th style="min-width: 150px;">Trạng thái</th>
+                                <th style="min-width: 140px;">Hạng</th>
+                                <th style="min-width: 140px;">Mượn</th>
+                                <th style="min-width: 260px;" class="text-center">Chức năng</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="b : ${borrowers}">
+                                <td>
+                                    <span class="fw-semibold text-secondary" th:text="${b.id}">1</span>
+                                </td>
+
+                                <td>
+                                    <div class="borrower-info">
+                                        <div class="avatar"
+                                             th:text="${b.fullName != null and !#strings.isEmpty(b.fullName) ? #strings.substring(b.fullName, 0, 1).toUpperCase() : 'U'}">
+                                            U
+                                        </div>
+                                        <div>
+                                            <div class="borrower-name" th:text="${b.fullName ?: '---'}">Nguyễn Văn A</div>
+                                            <div class="borrower-meta text-truncate-2"
+                                                 th:text="${b.cardNumber ?: 'Chưa có mã thẻ'}">
+                                                Chưa có mã thẻ
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="contact-block">
+                                        <div th:text="${b.phone ?: '---'}">---</div>
+                                        <div class="contact-subtext text-truncate-2" th:text="${b.email ?: '---'}">---</div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span th:class="${b.status != null and b.status.name() == 'ACTIVE' ? 'badge-pill status-active' :
+                                                    (b.status != null and b.status.name() == 'LOCKED' ? 'badge-pill status-locked' : 'badge-pill status-overdue')}">
+                                        <i th:class="${b.status != null and b.status.name() == 'ACTIVE' ? 'bi bi-check-circle-fill' :
+                                                      (b.status != null and b.status.name() == 'LOCKED' ? 'bi bi-lock-fill' : 'bi bi-exclamation-triangle-fill')}"></i>
+                                        <span th:text="${b.status != null and b.status.name() == 'ACTIVE' ? 'Đang hoạt động'
+                                                       : (b.status != null and b.status.name() == 'LOCKED' ? 'Bị khóa' : 'Đang nợ sách')}">
+                                            Đang hoạt động
+                                        </span>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span th:class="${b.membershipLevel != null and b.membershipLevel.name() == 'BRONZE' ? 'badge-pill level-bronze' :
+                                                    (b.membershipLevel != null and b.membershipLevel.name() == 'SILVER' ? 'badge-pill level-silver' : 'badge-pill level-gold')}">
+                                        <i class="bi bi-award"></i>
+                                        <span th:text="${b.membershipLevel != null and b.membershipLevel.name() == 'BRONZE' ? 'Đồng'
+                                                       : (b.membershipLevel != null and b.membershipLevel.name() == 'SILVER' ? 'Bạc' : 'Vàng')}">
+                                            Đồng
+                                        </span>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="borrow-box">
+                                        <div class="borrow-progress">
+                                            <i class="bi bi-book"></i>
+                                            <span th:text="${b.borrowProgress ?: '0'}">0</span>
+                                        </div>
+                                        <div class="small-muted mt-2">
+                                            Còn lại: <span th:text="${b.remainingBorrowLimit ?: '0'}">0</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="action-group">
+                                        <a th:href="@{/borrowers/detail/{id}(id=${b.id})}"
+                                           class="btn btn-sm btn-outline-info"
+                                           title="Chi tiết">
+                                            <i class="bi bi-eye me-1"></i> Chi tiết
+                                        </a>
+
+                                        <a th:href="@{/borrowers/edit/{id}(id=${b.id})}"
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="Sửa">
+                                            <i class="bi bi-pencil-square me-1"></i> Sửa
+                                        </a>
+
+                                        <a th:href="@{/borrowers/send-notification/{id}(id=${b.id})}"
+                                           class="btn btn-sm btn-outline-warning"
+                                           title="Gửi thông báo">
+                                            <i class="bi bi-bell me-1"></i> Nhắc
+                                        </a>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                th:attr="data-url=@{/borrowers/delete/{id}(id=${b.id})},data-name=${b.fullName}"
+                                                onclick="openDeleteModal(this)"
+                                                title="Xóa">
+                                            <i class="bi bi-trash3 me-1"></i> Xóa
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center mt-4 gap-3"
+                     th:if="${borrowerPage != null and borrowerPage.totalPages > 0}">
+                    <div class="table-footer-note">
+                        Hiển thị trang
+                        <strong th:text="${borrowerPage.number + 1}">1</strong>
+                        trên
+                        <strong th:text="${borrowerPage.totalPages}">1</strong>
+                        — Tổng cộng
+                        <strong th:text="${borrowerPage.totalElements}">0</strong>
+                        người mượn
+                    </div>
+
+                    <nav>
+                        <ul class="pagination mb-0">
+                            <li class="page-item" th:classappend="${borrowerPage.first} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/borrowers(page=${borrowerPage.number - 1},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword},status=${selectedStatus},membershipLevel=${selectedMembershipLevel},active=${selectedActive})}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            <li class="page-item"
+                                th:each="i : ${#numbers.sequence(0, borrowerPage.totalPages - 1)}"
+                                th:classappend="${i == borrowerPage.number} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/borrowers(page=${i},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword},status=${selectedStatus},membershipLevel=${selectedMembershipLevel},active=${selectedActive})}"
+                                   th:text="${i + 1}">
+                                </a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${borrowerPage.last} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/borrowers(page=${borrowerPage.number + 1},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword},status=${selectedStatus},membershipLevel=${selectedMembershipLevel},active=${selectedActive})}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteBorrowerModal" tabindex="-1" aria-labelledby="deleteBorrowerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 22px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="deleteBorrowerModalLabel">
+                    <i class="bi bi-trash3 text-danger me-2"></i>Xác nhận xóa
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <p class="mb-2">Bạn có chắc chắn muốn xóa người mượn này không?</p>
+                <div class="p-3 rounded-4 bg-light border">
+                    <div class="small text-muted mb-1">Người mượn được chọn</div>
+                    <div id="deleteBorrowerName" class="fw-semibold">---</div>
+                </div>
+                <p class="text-danger small mt-3 mb-0">
+                    <i class="bi bi-exclamation-circle me-1"></i>
+                    Hành động này có thể không khôi phục được.
+                </p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Hủy
+                </button>
+                <a id="confirmDeleteBtn" href="#" class="btn btn-danger">
+                    <i class="bi bi-trash3 me-1"></i> Xóa người mượn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(button) {
+        const url = button.getAttribute('data-url');
+        const name = button.getAttribute('data-name') || 'Không xác định';
+
+        document.getElementById('confirmDeleteBtn').setAttribute('href', url);
+        document.getElementById('deleteBorrowerName').textContent = name;
+
+        const modal = new bootstrap.Modal(document.getElementById('deleteBorrowerModal'));
+        modal.show();
+    }
+</script>
+
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

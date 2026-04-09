@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm nhân viên</title>
+    <style>
+        body { font-family: Arial; margin: 30px; }
+        form { width: 500px; }
+        div { margin-bottom: 10px; }
+        input, select { width: 100%; padding: 8px; }
+    </style>
+</head>
+<body>
+
+<h1>Thêm nhân viên</h1>
+
+<form th:action="@{/employees/save}" th:object="${employee}" method="post">
+
+    <div>
+        <label>Họ tên:</label>
+        <input type="text" th:field="*{fullName}" required>
+    </div>
+
+    <div>
+        <label>Username:</label>
+        <input type="text" th:field="*{username}" required>
+    </div>
+
+    <div>
+        <label>Mật khẩu:</label>
+        <input type="password" th:field="*{passwordHash}" required>
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}">
+    </div>
+
+    <div>
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}">
+    </div>
+
+    <div>
+        <label>Role:</label>
+        <select th:field="*{role}">
+            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label>Active:</label>
+        <select th:field="*{active}">
+            <option value="true">Hoạt động</option>
+            <option value="false">Khóa</option>
+        </select>
+    </div>
+
+    <button type="submit">Lưu</button>
+    <a th:href="@{/employees}">Quay lại</a>
+
+</form>
+
+</body>
+</html>
