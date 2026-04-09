@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm người mượn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --success-soft: #ecfdf3;
+            --warning-soft: #fff7ed;
+            --danger-soft: #fef2f2;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 48px;
+            border-radius: 14px;
+            border-color: #dbe2ea;
+            box-shadow: none !important;
+        }
+
+        textarea.form-control {
+            min-height: 110px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .profile-preview {
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .avatar-preview {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.20);
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .info-box-label {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .sticky-side {
+            position: sticky;
+            top: 24px;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .sticky-side {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-person-plus-fill"></i>
+                            Hồ sơ thành viên mới
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Thêm người mượn</h1>
+                        <p class="hero-subtitle mb-0">
+                            Tạo hồ sơ người mượn mới, thiết lập trạng thái, hạng thành viên
+                            và thông tin nhận diện để sử dụng trong hệ thống thư viện.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/borrowers}" class="btn btn-light-soft">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger shadow-sm mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <form th:action="@{/borrowers/save}" th:object="${borrower}" method="post">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card soft-card h-100">
+                        <div class="card-body p-4 p-lg-4">
+                            <div class="mb-4">
+                                <h2 class="section-title mb-1">Thông tin cơ bản</h2>
+                                <div class="section-subtitle">Nhập thông tin nhận dạng và liên hệ của người mượn</div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Họ tên *</label>
+                                    <input type="text" class="form-control" th:field="*{fullName}" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" th:field="*{phone}">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">Mã thẻ</label>
+                                    <input type="text" class="form-control" th:field="*{cardNumber}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" th:field="*{email}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">QR / Barcode</label>
+                                    <input type="text" class="form-control" th:field="*{qrCode}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Ngày tạo</label>
+                                    <input type="date" class="form-control" th:field="*{createdDate}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Kích hoạt</label>
+                                    <select class="form-select" th:field="*{active}">
+                                        <option th:value="true">Đang dùng</option>
+                                        <option th:value="false">Ngưng</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <textarea class="form-control" rows="3" th:field="*{address}"></textarea>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="mb-4">
+                                <h2 class="section-title mb-1">Cấu hình tài khoản</h2>
+                                <div class="section-subtitle">Thiết lập quyền mượn và trạng thái thành viên</div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Trạng thái</label>
+                                    <select class="form-select" th:field="*{status}">
+                                        <option th:each="s : ${statuses}"
+                                                th:value="${s}"
+                                                th:text="${s == T(com.example.libmanagement.enums.BorrowerStatus).ACTIVE ? 'Đang hoạt động'
+                                                        : (s == T(com.example.libmanagement.enums.BorrowerStatus).LOCKED ? 'Bị khóa' : 'Đang nợ sách')}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Hạng thành viên</label>
+                                    <select class="form-select" th:field="*{membershipLevel}" id="membershipLevel">
+                                        <option th:each="m : ${membershipLevels}"
+                                                th:value="${m}"
+                                                th:text="${m == T(com.example.libmanagement.enums.MembershipLevel).BRONZE ? 'Đồng'
+                                                        : (m == T(com.example.libmanagement.enums.MembershipLevel).SILVER ? 'Bạc' : 'Vàng')}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Giới hạn mượn</label>
+                                    <input type="number" class="form-control" id="maxBorrowLimitPreview"
+                                           th:value="${borrower.maxBorrowLimit}" readonly>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Điểm uy tín</label>
+                                    <input type="number" class="form-control" th:field="*{reputationScore}">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Đang mượn</label>
+                                    <input type="number" class="form-control" th:field="*{currentBorrowedCount}">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Số lần trả muộn</label>
+                                    <input type="number" class="form-control" th:field="*{lateReturnCount}">
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i> Lưu người mượn
+                                </button>
+                                <a th:href="@{/borrowers}" class="btn btn-outline-secondary">
+                                    Hủy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sticky-side">
+                        <div class="card soft-card">
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <h2 class="section-title mb-1">Xem trước hồ sơ</h2>
+                                    <div class="section-subtitle">Thông tin sẽ hiển thị như một hồ sơ người mượn</div>
+                                </div>
+
+                                <div class="profile-preview mb-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-preview" id="avatarPreview">U</div>
+                                        <div>
+                                            <div class="fw-bold fs-5" id="namePreview">Chưa nhập họ tên</div>
+                                            <div class="text-muted" id="cardPreview">Chưa có mã thẻ</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-box mb-3">
+                                    <div class="info-box-label">Email</div>
+                                    <div id="emailPreview">---</div>
+                                </div>
+
+                                <div class="info-box mb-3">
+                                    <div class="info-box-label">Số điện thoại</div>
+                                    <div id="phonePreview">---</div>
+                                </div>
+
+                                <div class="info-box mb-3">
+                                    <div class="info-box-label">Hạng thành viên</div>
+                                    <div id="levelPreview">---</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-label">Giới hạn mượn</div>
+                                    <div id="limitPreview">---</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
+<script>
+    const fullNameInput = document.querySelector('[name="fullName"]');
+    const cardNumberInput = document.querySelector('[name="cardNumber"]');
+    const emailInput = document.querySelector('[name="email"]');
+    const phoneInput = document.querySelector('[name="phone"]');
+    const membershipSelect = document.getElementById('membershipLevel');
+    const maxBorrowLimitPreview = document.getElementById('maxBorrowLimitPreview');
+
+    const avatarPreview = document.getElementById('avatarPreview');
+    const namePreview = document.getElementById('namePreview');
+    const cardPreview = document.getElementById('cardPreview');
+    const emailPreview = document.getElementById('emailPreview');
+    const phonePreview = document.getElementById('phonePreview');
+    const levelPreview = document.getElementById('levelPreview');
+    const limitPreview = document.getElementById('limitPreview');
+
+    function updateMaxBorrowLimitPreview() {
+        const value = membershipSelect ? membershipSelect.value : '';
+        if (value === 'BRONZE') {
+            maxBorrowLimitPreview.value = 3;
+            levelPreview.textContent = 'Đồng';
+            limitPreview.textContent = '3 cuốn';
+        } else if (value === 'SILVER') {
+            maxBorrowLimitPreview.value = 5;
+            levelPreview.textContent = 'Bạc';
+            limitPreview.textContent = '5 cuốn';
+        } else if (value === 'GOLD') {
+            maxBorrowLimitPreview.value = 7;
+            levelPreview.textContent = 'Vàng';
+            limitPreview.textContent = '7 cuốn';
+        } else {
+            maxBorrowLimitPreview.value = 3;
+            levelPreview.textContent = 'Đồng';
+            limitPreview.textContent = '3 cuốn';
+        }
+    }
+
+    function updateProfilePreview() {
+        const fullName = fullNameInput && fullNameInput.value ? fullNameInput.value.trim() : '';
+        const cardNumber = cardNumberInput && cardNumberInput.value ? cardNumberInput.value.trim() : '';
+        const email = emailInput && emailInput.value ? emailInput.value.trim() : '';
+        const phone = phoneInput && phoneInput.value ? phoneInput.value.trim() : '';
+
+        avatarPreview.textContent = fullName ? fullName.substring(0, 1).toUpperCase() : 'U';
+        namePreview.textContent = fullName || 'Chưa nhập họ tên';
+        cardPreview.textContent = cardNumber || 'Chưa có mã thẻ';
+        emailPreview.textContent = email || '---';
+        phonePreview.textContent = phone || '---';
+    }
+
+    if (membershipSelect) {
+        membershipSelect.addEventListener('change', updateMaxBorrowLimitPreview);
+        updateMaxBorrowLimitPreview();
+    }
+
+    [fullNameInput, cardNumberInput, emailInput, phoneInput].forEach(function (input) {
+        if (input) input.addEventListener('input', updateProfilePreview);
+    });
+
+    updateProfilePreview();
+</script>
+</body>
+</html>

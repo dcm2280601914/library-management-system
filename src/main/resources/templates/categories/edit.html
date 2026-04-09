@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật thể loại</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --warning-soft: #fff7ed;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f8fafc 100%);
+            color: var(--text-main);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 18px 45px rgba(37, 99, 235, 0.18);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: 60px;
+            bottom: -40px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            max-width: 780px;
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .soft-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 48px;
+            border-radius: 14px;
+            border-color: #dbe2ea;
+            box-shadow: none !important;
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .btn {
+            border-radius: 14px;
+            font-weight: 600;
+            padding: 0.68rem 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+        }
+
+        .btn-light-soft {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+
+        .btn-light-soft:hover {
+            background: rgba(255,255,255,0.94);
+            color: #0f172a;
+        }
+
+        .preview-box {
+            background: linear-gradient(135deg, #eff6ff, #ffffff);
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .preview-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            color: #1d4ed8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            margin-bottom: 14px;
+        }
+
+        .preview-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .preview-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            min-height: 54px;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: #ecfdf5;
+            color: #15803d;
+        }
+
+        .status-chip.hidden {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 14px;
+        }
+
+        .info-label {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .sticky-side {
+            position: sticky;
+            top: 24px;
+        }
+
+        @media (min-width: 1400px) {
+            .container-fluid.custom-page {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-actions {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .sticky-side {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid custom-page py-4 py-lg-4 px-3 px-lg-4 px-xxl-5">
+    <div class="page-wrapper">
+
+        <div class="card hero-card mb-4">
+            <div class="card-body p-4 p-lg-5 hero-content">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3"
+                             style="background: rgba(255,255,255,0.12); font-weight: 600;">
+                            <i class="bi bi-pencil-square"></i>
+                            Chỉnh sửa danh mục
+                        </div>
+                        <h1 class="hero-title h2 mb-2">Cập nhật thể loại</h1>
+                        <p class="hero-subtitle mb-0">
+                            Chỉnh sửa tên, mô tả và trạng thái hiển thị của thể loại
+                            để đồng bộ dữ liệu và trải nghiệm quản lý trong hệ thống.
+                        </p>
+                    </div>
+
+                    <div class="hero-actions d-flex flex-wrap gap-2">
+                        <a th:href="@{/categories}" class="btn btn-light-soft">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Quay lại danh sách
+                        </a>
+                        <a th:href="@{/categories/detail/{id}(id=${category.id})}" class="btn btn-light-soft">
+                            <i class="bi bi-eye me-1"></i> Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger shadow-sm mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <form th:action="@{/categories/update/{id}(id=${category.id})}" th:object="${category}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card soft-card h-100">
+                        <div class="card-body p-4 p-lg-4">
+                            <div class="mb-4">
+                                <h2 class="section-title mb-1">Thông tin chỉnh sửa</h2>
+                                <div class="section-subtitle">Cập nhật dữ liệu thể loại đang có trong hệ thống</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tên thể loại <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{name}"
+                                       id="categoryName"
+                                       required
+                                       placeholder="Nhập tên thể loại">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả</label>
+                                <textarea class="form-control"
+                                          th:field="*{description}"
+                                          id="categoryDescription"
+                                          rows="5"
+                                          placeholder="Nhập mô tả cho thể loại"></textarea>
+                                <div class="form-text">Mô tả rõ ràng giúp tra cứu và phân loại dễ hơn.</div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label">Trạng thái</label>
+                                <select class="form-select" th:field="*{status}" id="categoryStatus">
+                                    <option th:value="${T(com.example.libmanagement.enums.CategoryStatus).VISIBLE}">Hiển thị</option>
+                                    <option th:value="${T(com.example.libmanagement.enums.CategoryStatus).HIDDEN}">Ẩn</option>
+                                </select>
+                                <div class="form-text">Thể loại ẩn vẫn tồn tại trong hệ thống nhưng không hiển thị bên ngoài.</div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-1"></i> Cập nhật thể loại
+                                </button>
+                                <a th:href="@{/categories/detail/{id}(id=${category.id})}" class="btn btn-outline-primary">
+                                    <i class="bi bi-eye me-1"></i> Xem chi tiết
+                                </a>
+                                <a th:href="@{/categories}" class="btn btn-outline-secondary">Hủy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sticky-side">
+                        <div class="card soft-card">
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <h2 class="section-title mb-1">Xem trước thể loại</h2>
+                                    <div class="section-subtitle">Thông tin hiện tại sau khi chỉnh sửa</div>
+                                </div>
+
+                                <div class="preview-box">
+                                    <div class="preview-icon">
+                                        <i class="bi bi-bookmark-star-fill"></i>
+                                    </div>
+
+                                    <div class="preview-name" id="previewName"
+                                         th:text="${category.name != null and !#strings.isEmpty(category.name) ? category.name : 'Tên thể loại'}">
+                                        Tên thể loại
+                                    </div>
+
+                                    <div class="preview-desc" id="previewDesc"
+                                         th:text="${category.description != null and !#strings.isEmpty(category.description) ? category.description : 'Mô tả của thể loại sẽ hiển thị tại đây.'}">
+                                        Mô tả của thể loại sẽ hiển thị tại đây.
+                                    </div>
+
+                                    <div class="status-chip"
+                                         id="statusChip"
+                                         th:classappend="${category.status != null and category.status.name() == 'HIDDEN'} ? ' hidden' : ''">
+                                        <i class="bi bi-circle-fill"></i>
+                                        <span id="statusText"
+                                              th:text="${category.status != null and category.status.name() == 'HIDDEN' ? 'Ẩn' : 'Hiển thị'}">
+                                            Hiển thị
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-label">Mã thể loại</div>
+                                    <div th:text="${category.id}">1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const nameInput = document.getElementById('categoryName');
+    const descInput = document.getElementById('categoryDescription');
+    const statusInput = document.getElementById('categoryStatus');
+
+    const previewName = document.getElementById('previewName');
+    const previewDesc = document.getElementById('previewDesc');
+    const statusChip = document.getElementById('statusChip');
+    const statusText = document.getElementById('statusText');
+
+    function updatePreview() {
+        const name = nameInput.value.trim() || 'Tên thể loại';
+        const desc = descInput.value.trim() || 'Mô tả của thể loại sẽ hiển thị tại đây.';
+        const status = statusInput.options[statusInput.selectedIndex].text;
+
+        previewName.textContent = name;
+        previewDesc.textContent = desc;
+        statusText.textContent = status;
+
+        if (status.toLowerCase().includes('ẩn')) {
+            statusChip.classList.add('hidden');
+        } else {
+            statusChip.classList.remove('hidden');
+        }
+    }
+
+    nameInput.addEventListener('input', updatePreview);
+    descInput.addEventListener('input', updatePreview);
+    statusInput.addEventListener('change', updatePreview);
+
+    updatePreview();
+</script>
+</body>
+</html>

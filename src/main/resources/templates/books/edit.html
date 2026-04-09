@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sửa sách</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-soft: #eff6ff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --card-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            --radius-xl: 22px;
+            --radius-lg: 18px;
+        }
+
+        body {
+            background: linear-gradient(180deg, #f8fbff 0%, #f1f5f9 100%);
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text-main);
+        }
+
+        .page-container {
+            padding: 24px;
+        }
+
+        .hero-card {
+            border: none;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 45%, #60a5fa 100%);
+            color: white;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -30px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.10);
+            border-radius: 50%;
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            right: 70px;
+            bottom: -80px;
+            width: 160px;
+            height: 160px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.88);
+            margin-bottom: 0;
+        }
+
+        .hero-btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 10px 16px;
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.14);
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero-btn:hover {
+            background: rgba(255,255,255,0.22);
+            color: white;
+        }
+
+        .main-card {
+            margin-top: 24px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            padding: 24px 24px 0;
+        }
+
+        .card-body-custom {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .section-subtitle {
+            color: var(--text-sub);
+            margin-bottom: 0;
+        }
+
+        .form-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            height: 100%;
+        }
+
+        .block-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select,
+        .form-control:focus,
+        .form-select:focus {
+            border-radius: 12px;
+            min-height: 46px;
+            box-shadow: none;
+        }
+
+        .form-control,
+        .form-select {
+            border: 1px solid #dbe2ea;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .helper-text {
+            color: var(--text-sub);
+            font-size: 0.88rem;
+            margin-top: 6px;
+        }
+
+        .preview-card {
+            background: white;
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .preview-cover {
+            width: 140px;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            margin: 0 auto 12px;
+            display: block;
+        }
+
+        .preview-placeholder {
+            width: 140px;
+            height: 190px;
+            margin: 0 auto 12px;
+            border-radius: 14px;
+            border: 1px dashed #cbd5e1;
+            background: #f8fafc;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.92rem;
+        }
+
+        .preview-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .preview-meta {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        .status-box {
+            margin-top: 14px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .status-label {
+            font-size: 0.84rem;
+            color: var(--text-sub);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .status-value {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .stock-good {
+            color: #15803d;
+        }
+
+        .stock-empty {
+            color: #dc2626;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 11px 18px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-soft {
+            background: #eef2ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+        }
+
+        .btn-soft:hover {
+            background: #e0e7ff;
+            color: #312e81;
+        }
+
+        .required-star {
+            color: #dc2626;
+        }
+
+        @media (max-width: 991.98px) {
+            .page-container {
+                padding: 16px;
+            }
+
+            .hero-title {
+                font-size: 1.55rem;
+            }
+
+            .card-header-custom,
+            .card-body-custom {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .hero-title {
+                font-size: 1.3rem;
+            }
+
+            .form-actions .btn,
+            .form-actions a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid page-container">
+
+    <div class="card hero-card">
+        <div class="card-body p-4 p-lg-5">
+            <div class="row align-items-center g-4 hero-content">
+                <div class="col-lg-8">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-4 bg-white bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+                             style="width:64px;height:64px;">
+                            <i class="bi bi-pencil-square fs-3"></i>
+                        </div>
+                        <div>
+                            <h1 class="hero-title">Sửa thông tin sách</h1>
+                            <p class="hero-subtitle">
+                                Cập nhật dữ liệu sách để kho luôn chính xác, dễ quản lý và dễ tra cứu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a th:href="@{/books}" class="hero-btn">
+                            <i class="bi bi-arrow-left me-2"></i>Quay lại danh sách
+                        </a>
+                        <a th:href="@{/books/detail/{id}(id=${book.id})}" class="hero-btn">
+                            <i class="bi bi-eye me-2"></i>Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <span class="badge bg-light text-primary fs-6 px-3 py-2">
+                        Mã sách: <span th:text="${book.id}">1</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-card">
+        <div class="card-header-custom">
+            <h2 class="section-title">Chỉnh sửa dữ liệu sách</h2>
+            <p class="section-subtitle">Các trường có dấu <span class="required-star">*</span> là bắt buộc.</p>
+        </div>
+
+        <div class="card-body-custom">
+            <div th:if="${errorMessage}" class="alert alert-danger mb-4" th:text="${errorMessage}"></div>
+
+            <form th:action="@{/books/update/{id}(id=${book.id})}" method="post">
+                <div class="row g-4">
+
+                    <div class="col-12 col-xl-8">
+                        <div class="form-block">
+                            <div class="block-title">
+                                <i class="bi bi-journal-text me-2"></i>Thông tin cơ bản
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Tên sách <span class="required-star">*</span></label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="title"
+                                           id="titleInput"
+                                           th:value="${book.title}"
+                                           required
+                                           placeholder="Nhập tên sách">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Thể loại</label>
+                                    <select class="form-select" name="category.id">
+                                        <option value="">-- Chọn thể loại --</option>
+                                        <option th:each="c : ${categories}"
+                                                th:value="${c.id}"
+                                                th:text="${c.name}"
+                                                th:selected="${book.category != null and book.category.id == c.id}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Tác giả</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="author"
+                                           id="authorInput"
+                                           th:value="${book.author}"
+                                           placeholder="Nhập tên tác giả">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Nhà xuất bản</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="publisher"
+                                           th:value="${book.publisher}"
+                                           placeholder="Nhập nhà xuất bản">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Năm xuất bản <span class="required-star">*</span></label>
+                                    <input type="number"
+                                           class="form-control"
+                                           name="publicationYear"
+                                           id="yearInput"
+                                           th:value="${book.publicationYear}"
+                                           required
+                                           placeholder="Ví dụ: 2024">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">ISBN</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="isbn"
+                                           th:value="${book.isbn}"
+                                           placeholder="Ví dụ: 978-604-xx-xxxx-x">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Barcode</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="barcode"
+                                           th:value="${book.barcode}"
+                                           placeholder="Nhập mã barcode">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Mô tả</label>
+                                    <textarea class="form-control"
+                                              name="description"
+                                              rows="4"
+                                              placeholder="Nhập mô tả ngắn về sách..."
+                                              th:text="${book.description}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-xl-4">
+                        <div class="form-block">
+                            <div class="block-title">
+                                <i class="bi bi-box-seam me-2"></i>Kho và hiển thị
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Vị trí lưu trữ</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="location"
+                                           th:value="${book.location}"
+                                           placeholder="Ví dụ: Kệ A - Tầng 2 - Ô 03">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Đường dẫn ảnh bìa</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="coverImage"
+                                           id="coverImageInput"
+                                           th:value="${book.coverImage}"
+                                           placeholder="/images/book1.jpg hoặc https://...">
+                                    <div class="helper-text">Có thể dùng đường dẫn nội bộ hoặc URL ảnh online.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Ngày nhập kho</label>
+                                    <input type="date"
+                                           class="form-control"
+                                           name="importDate"
+                                           th:value="${book.importDate}">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Tổng số lượng <span class="required-star">*</span></label>
+                                    <input type="number"
+                                           class="form-control"
+                                           name="totalQuantity"
+                                           id="totalQuantityInput"
+                                           th:value="${book.totalQuantity}"
+                                           required
+                                           min="0"
+                                           placeholder="0">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Số lượng còn lại <span class="required-star">*</span></label>
+                                    <input type="number"
+                                           class="form-control"
+                                           name="availableQuantity"
+                                           id="availableQuantityInput"
+                                           th:value="${book.availableQuantity}"
+                                           required
+                                           min="0"
+                                           placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="preview-card mt-4">
+                            <img id="coverPreview"
+                                 class="preview-cover"
+                                 alt="Ảnh bìa xem trước"
+                                 th:if="${book.coverImage != null and !#strings.isEmpty(book.coverImage)}"
+                                 th:src="${book.coverImage}">
+
+                            <div id="coverPlaceholder"
+                                 class="preview-placeholder"
+                                 th:style="${book.coverImage != null and !#strings.isEmpty(book.coverImage)} ? 'display:none;' : 'display:flex;'">
+                                Ảnh bìa sẽ hiển thị ở đây
+                            </div>
+
+                            <div class="preview-title" id="previewTitle"
+                                 th:text="${book.title != null and !#strings.isEmpty(book.title) ? book.title : 'Tên sách'}">
+                                Tên sách
+                            </div>
+
+                            <div class="preview-meta" id="previewMeta">
+                                <span th:text="${book.author != null and !#strings.isEmpty(book.author) ? book.author : 'Tác giả'}"></span>
+                                •
+                                <span th:text="${book.publicationYear != null ? book.publicationYear : 'Năm xuất bản'}"></span>
+                            </div>
+
+                            <div class="status-box">
+                                <div class="status-label">Tình trạng tồn kho</div>
+                                <div class="status-value"
+                                     id="stockStatus"
+                                     th:text="${book.availableQuantity != null and book.availableQuantity > 0} ? 'Còn sách trong kho' : 'Hết sách trong kho'"
+                                     th:classappend="${book.availableQuantity != null and book.availableQuantity > 0} ? ' stock-good' : ' stock-empty'">
+                                    Còn sách trong kho
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-2"></i>Cập nhật sách
+                    </button>
+                    <a th:href="@{/books/detail/{id}(id=${book.id})}" class="btn btn-soft">
+                        <i class="bi bi-eye me-2"></i>Xem chi tiết
+                    </a>
+                    <a th:href="@{/books}" class="btn btn-soft">
+                        <i class="bi bi-arrow-left me-2"></i>Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const titleInput = document.getElementById('titleInput');
+    const authorInput = document.getElementById('authorInput');
+    const yearInput = document.getElementById('yearInput');
+    const coverImageInput = document.getElementById('coverImageInput');
+    const availableQuantityInput = document.getElementById('availableQuantityInput');
+
+    const previewTitle = document.getElementById('previewTitle');
+    const previewMeta = document.getElementById('previewMeta');
+    const coverPreview = document.getElementById('coverPreview');
+    const coverPlaceholder = document.getElementById('coverPlaceholder');
+    const stockStatus = document.getElementById('stockStatus');
+
+    function updatePreview() {
+        const title = titleInput.value.trim() || 'Tên sách';
+        const author = authorInput.value.trim() || 'Tác giả';
+        const year = yearInput.value.trim() || 'Năm xuất bản';
+        const cover = coverImageInput.value.trim();
+        const available = parseInt(availableQuantityInput.value || '0', 10);
+
+        previewTitle.textContent = title;
+        previewMeta.textContent = author + ' • ' + year;
+
+        if (cover) {
+            if (!coverPreview) {
+                const img = document.createElement('img');
+                img.id = 'coverPreview';
+                img.className = 'preview-cover';
+                img.alt = 'Ảnh bìa xem trước';
+                coverPlaceholder.parentNode.insertBefore(img, coverPlaceholder);
+            }
+
+            const currentPreview = document.getElementById('coverPreview');
+            currentPreview.src = cover;
+            currentPreview.style.display = 'block';
+            coverPlaceholder.style.display = 'none';
+
+            currentPreview.onerror = function () {
+                currentPreview.style.display = 'none';
+                coverPlaceholder.style.display = 'flex';
+            };
+        } else {
+            const currentPreview = document.getElementById('coverPreview');
+            if (currentPreview) {
+                currentPreview.style.display = 'none';
+            }
+            coverPlaceholder.style.display = 'flex';
+        }
+
+        if (available > 0) {
+            stockStatus.textContent = 'Còn sách trong kho';
+            stockStatus.classList.remove('stock-empty');
+            stockStatus.classList.add('stock-good');
+        } else {
+            stockStatus.textContent = 'Hết sách trong kho';
+            stockStatus.classList.remove('stock-good');
+            stockStatus.classList.add('stock-empty');
+        }
+    }
+
+    titleInput.addEventListener('input', updatePreview);
+    authorInput.addEventListener('input', updatePreview);
+    yearInput.addEventListener('input', updatePreview);
+    coverImageInput.addEventListener('input', updatePreview);
+    availableQuantityInput.addEventListener('input', updatePreview);
+
+    updatePreview();
+</script>
+</body>
+</html>

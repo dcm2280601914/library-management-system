@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết phiếu trả</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Chi tiết phiếu trả</h2>
+            <p class="text-muted mb-0">Thông tin đầy đủ về việc trả sách, tình trạng sách và tiền phạt.</p>
+        </div>
+        <a th:href="@{/return-records}" class="btn btn-outline-secondary">Quay lại</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Mã phiếu trả</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.returnCode}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Ngày trả</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.returnDate}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Người mượn</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.borrowRecord.borrower.fullName}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sách</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.borrowRecord.book.title}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Nhân viên xử lý</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.employee.fullName}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Trạng thái trả</label>
+                    <div class="form-control bg-light">
+                        <span th:if="${returnRecord.status.name() == 'RETURNED'}" class="badge bg-success">Trả bình thường</span>
+                        <span th:if="${returnRecord.status.name() == 'LATE'}" class="badge bg-warning text-dark">Trả trễ</span>
+                        <span th:if="${returnRecord.status.name() == 'DAMAGED'}" class="badge bg-danger">Hư hỏng</span>
+                        <span th:if="${returnRecord.status.name() == 'LOST'}" class="badge bg-dark">Mất sách</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tình trạng sách khi trả</label>
+                    <div class="form-control bg-light">
+                        <span th:if="${returnRecord.bookCondition.name() == 'INTACT'}" class="badge bg-success">Nguyên vẹn</span>
+                        <span th:if="${returnRecord.bookCondition.name() == 'MINOR_DAMAGE'}" class="badge bg-warning text-dark">Hư hỏng nhẹ</span>
+                        <span th:if="${returnRecord.bookCondition.name() == 'SEVERE_DAMAGE'}" class="badge bg-danger">Hư hỏng nặng</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Số ngày trễ</label>
+                    <input type="text" class="form-control" th:value="${returnRecord.overdueDays + ' ngày'}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Tiền phạt</label>
+                    <input type="text" class="form-control"
+                           th:value="${#numbers.formatDecimal(returnRecord.fineAmount, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"
+                           readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Lý do phạt</label>
+                    <div class="form-control bg-light">
+                        <span th:if="${returnRecord.fineReason.name() == 'NONE'}">Không có</span>
+                        <span th:if="${returnRecord.fineReason.name() == 'LATE_RETURN'}">Trả muộn</span>
+                        <span th:if="${returnRecord.fineReason.name() == 'DAMAGED'}">Hư hỏng</span>
+                        <span th:if="${returnRecord.fineReason.name() == 'LOST'}">Mất sách</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Trạng thái thanh toán</label>
+                    <div class="form-control bg-light">
+                        <span th:if="${returnRecord.paymentStatus.name() == 'PAID'}" class="badge bg-success">Đã thu</span>
+                        <span th:if="${returnRecord.paymentStatus.name() == 'UNPAID'}" class="badge bg-secondary">Chưa thu</span>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Ghi chú</label>
+                    <textarea class="form-control" rows="3" readonly th:text="${returnRecord.note}"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
