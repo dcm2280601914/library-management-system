@@ -1,8 +1,8 @@
-package com.example.libmanagement.repository;
+package com.example.librarymanagementsystem.repository;
 
-import com.example.libmanagement.entity.Invoice;
-import com.example.libmanagement.entity.ReturnRecord;
-import com.example.libmanagement.enums.InvoiceStatus;
+import com.example.librarymanagementsystem.entity.Invoice;
+import com.example.librarymanagementsystem.entity.ReturnRecord;
+import com.example.librarymanagementsystem.enums.InvoiceStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

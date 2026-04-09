@@ -1,6 +1,6 @@
-package com.example.libmanagement.repository;
+package com.example.librarymanagementsystem.repository;
 
-import com.example.libmanagement.entity.ReturnRecord;
+import com.example.librarymanagementsystem.entity.ReturnRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

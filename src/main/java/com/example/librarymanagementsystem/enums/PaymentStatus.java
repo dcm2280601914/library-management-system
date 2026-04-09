@@ -1,4 +1,4 @@
-package com.example.libmanagement.enums;
+package com.example.librarymanagementsystem.enums;
 
 
 public enum PaymentStatus {

@@ -1,6 +1,6 @@
-package com.example.libmanagement.repository;
+package com.example.librarymanagementsystem.repository;
 
-import com.example.libmanagement.entity.Borrower;
+import com.example.librarymanagementsystem.entity.Borrower;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

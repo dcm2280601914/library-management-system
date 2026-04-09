@@ -1,8 +1,8 @@
-package com.example.libmanagement.repository;
+package com.example.librarymanagementsystem.repository;
 
-import com.example.libmanagement.dto.CategoryStatisticsDto;
-import com.example.libmanagement.entity.Category;
-import com.example.libmanagement.enums.CategoryStatus;
+import com.example.librarymanagementsystem.dto.CategoryStatisticsDto;
+import com.example.librarymanagementsystem.entity.Category;
+import com.example.librarymanagementsystem.enums.CategoryStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
-package com.example.libmanagement.repository;
+package com.example.librarymanagementsystem.repository;
 
-import com.example.libmanagement.entity.BorrowRecord;
-import com.example.libmanagement.enums.BorrowStatus;
+import com.example.librarymanagementsystem.entity.BorrowRecord;
+import com.example.librarymanagementsystem.enums.BorrowStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
