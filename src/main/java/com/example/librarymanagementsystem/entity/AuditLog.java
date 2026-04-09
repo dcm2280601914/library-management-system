@@ -1,4 +1,4 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

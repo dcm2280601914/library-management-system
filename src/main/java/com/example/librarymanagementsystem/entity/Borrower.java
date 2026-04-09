@@ -1,7 +1,7 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.BorrowerStatus;
-import com.example.libmanagement.enums.MembershipLevel;
+import com.example.librarymanagementsystem.enums.BorrowerStatus;
+import com.example.librarymanagementsystem.enums.MembershipLevel;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

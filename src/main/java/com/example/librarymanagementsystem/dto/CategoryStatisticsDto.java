@@ -1,6 +1,6 @@
-package com.example.libmanagement.dto;
+package com.example.librarymanagementsystem.dto;
 
-import com.example.libmanagement.enums.CategoryStatus;
+import com.example.librarymanagementsystem.enums.CategoryStatus;
 
 public class CategoryStatisticsDto {
 
@@ -12,7 +12,7 @@ public class CategoryStatisticsDto {
     private long borrowCount;
 
     public CategoryStatisticsDto(Long id, String name, String description,
-                                 CategoryStatus status, long bookCount, long borrowCount) {
+            CategoryStatus status, long bookCount, long borrowCount) {
         this.id = id;
         this.name = name;
         this.description = description;

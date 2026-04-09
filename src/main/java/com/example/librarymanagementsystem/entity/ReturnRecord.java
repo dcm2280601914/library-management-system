@@ -1,9 +1,9 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.BookCondition;
-import com.example.libmanagement.enums.FineReason;
-import com.example.libmanagement.enums.PaymentStatus;
-import com.example.libmanagement.enums.ReturnStatus;
+import com.example.librarymanagementsystem.enums.BookCondition;
+import com.example.librarymanagementsystem.enums.FineReason;
+import com.example.librarymanagementsystem.enums.PaymentStatus;
+import com.example.librarymanagementsystem.enums.ReturnStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

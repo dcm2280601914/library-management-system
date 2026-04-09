@@ -1,6 +1,6 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.Role;
+import com.example.librarymanagementsystem.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -52,7 +52,7 @@ public class Employee {
     }
 
     public Employee(String fullName, String username, String passwordHash, String email,
-                    String phone, Role role, Boolean active) {
+            String phone, Role role, Boolean active) {
         this.fullName = fullName;
         this.username = username;
         this.passwordHash = passwordHash;

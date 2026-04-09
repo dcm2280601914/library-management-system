@@ -1,6 +1,6 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.BorrowStatus;
+import com.example.librarymanagementsystem.enums.BorrowStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -45,7 +45,7 @@ public class BorrowRecord {
     }
 
     public BorrowRecord(String borrowCode, Borrower borrower, Employee employee, Book book,
-                        LocalDate borrowDate, LocalDate dueDate, BorrowStatus status, String note) {
+            LocalDate borrowDate, LocalDate dueDate, BorrowStatus status, String note) {
         this.borrowCode = borrowCode;
         this.borrower = borrower;
         this.employee = employee;

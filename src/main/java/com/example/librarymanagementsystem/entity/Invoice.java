@@ -1,7 +1,7 @@
-package com.example.libmanagement.entity;
+package com.example.librarymanagementsystem.entity;
 
-import com.example.libmanagement.enums.InvoiceStatus;
-import com.example.libmanagement.enums.PaymentMethod;
+import com.example.librarymanagementsystem.enums.InvoiceStatus;
+import com.example.librarymanagementsystem.enums.PaymentMethod;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
